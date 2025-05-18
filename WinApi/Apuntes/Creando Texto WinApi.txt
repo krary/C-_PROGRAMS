@@ -23,6 +23,33 @@ DEFAULT_QUALITY
 DEFAULT_PITCH | FF_SWISS
 TEXT("Arial") //NOMBRE DE LA FUENTE}
 
+
+/*
+HFONT CreateFontA(
+1  int nHeight,
+2  int nWidth,
+3  int nEscapement,
+4  int nOrientation,
+5  int fnWeight,
+6  DWORD fdwItalic,
+7  DWORD fdwUnderline,
+8  DWORD fdwStrikeOut,
+9  DWORD fdwCharSet,
+10 DWORD fdwOutputPrecision,
+11 DWORD fdwClipPrecision,
+12 DWORD fdwQuality,
+13 DWORD fdwPitchAndFamily,
+14 LPCSTR lpszFace
+);
+
+
+
+
+
+
+*/
+
+
 HFONT hOldFont = (HFONT)SelectObject(hdc,hfont)
 
 
