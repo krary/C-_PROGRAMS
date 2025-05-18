@@ -1,1 +1,35 @@
-Hola estoy es solo un experimento de lo que puedo hacer con nano
+#CREANDO TEXTOS DENTRO DE LA FUNCION LRESULT CALLBACK WindowProcedure:
+**********************************************************************
+case WM_PAINT:
+ STRUCTPAINT ps;
+ HDC hdc = BeginPaint(hwnd,&ps)
+ SetTextColor(hdc,RGB(0,0,234))
+
+#CREANDO ESTILO DE LETRA:
+*************************
+HFONT hFont = CreateFont{
+24 //ALTURA DE LA FUENTE
+0 //ANCHURA DE LA FUENTE
+0 //INCLINACION
+0 //ORIENTACION
+FW_BOLD //PESO(FW_NORMAL,FW_BOLD,ETC)
+TRUE //CURSIVA
+FALSE //SUBRAYADO
+FALSE, //TACHADO
+ANSI_CHARSET //JUEGO DE CARACTERES
+OUT_DEFAULT_PRECIS
+CLIP_DEFAULT_PRECIS
+DEFAULT_QUALITY
+DEFAULT_PITCH | FF_SWISS
+TEXT("Arial") //NOMBRE DE LA FUENTE}
+
+HFONT hOldFont = (HFONT)SelectObject(hdc,hfont)
+
+
+
+
+TextOut(hdc,pos_x,pos_y,msg,strlen(msg))
+SelectObject(hdc,hOldFont)
+DeleteObject(hfont) 
+EndPaint(hwnd,&ps)
+ break
