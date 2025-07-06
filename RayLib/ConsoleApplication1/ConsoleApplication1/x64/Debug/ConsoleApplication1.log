@@ -1,0 +1,12 @@
+﻿  ConsoleApplication1.cpp
+C:\Users\lisandro\3D Objects\Programa C++\Relyb\ConsoleApplication1\ConsoleApplication1\ConsoleApplication1.cpp(15,20): warning C4244: 'argumento': conversión de 'int' a 'float'; posible pérdida de datos
+C:\Users\lisandro\3D Objects\Programa C++\Relyb\ConsoleApplication1\ConsoleApplication1\ConsoleApplication1.cpp(15,17): warning C4244: 'argumento': conversión de 'float' a 'int'; posible pérdida de datos
+C:\Users\lisandro\3D Objects\Programa C++\Relyb\ConsoleApplication1\ConsoleApplication1\ConsoleApplication1.cpp(15,14): warning C4244: 'argumento': conversión de 'float' a 'int'; posible pérdida de datos
+C:\Users\lisandro\3D Objects\Programa C++\Relyb\ConsoleApplication1\ConsoleApplication1\ConsoleApplication1.cpp(39,26): warning C4244: '=': conversión de 'int' a 'float'; posible pérdida de datos
+C:\Users\lisandro\3D Objects\Programa C++\Relyb\ConsoleApplication1\ConsoleApplication1\ConsoleApplication1.cpp(50,20): warning C4244: 'argumento': conversión de 'float' a 'int'; posible pérdida de datos
+C:\Users\lisandro\3D Objects\Programa C++\Relyb\ConsoleApplication1\ConsoleApplication1\ConsoleApplication1.cpp(50,17): warning C4244: 'argumento': conversión de 'float' a 'int'; posible pérdida de datos
+C:\Users\lisandro\3D Objects\Programa C++\Relyb\ConsoleApplication1\ConsoleApplication1\ConsoleApplication1.cpp(91,36): warning C4244: '=': conversión de 'int' a 'float'; posible pérdida de datos
+C:\Users\lisandro\3D Objects\Programa C++\Relyb\ConsoleApplication1\ConsoleApplication1\ConsoleApplication1.cpp(99,27): warning C4244: 'argumento': conversión de 'float' a 'int'; posible pérdida de datos
+  ConsoleApplication1.vcxproj -> C:\Users\lisandro\3D Objects\Programa C++\Relyb\ConsoleApplication1\x64\Debug\ConsoleApplication1.exe
+  "pwsh.exe" no se reconoce como un comando interno o externo,
+  programa o archivo por lotes ejecutable.
