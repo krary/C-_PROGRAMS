@@ -20,9 +20,27 @@ void show_info_root(uint8_t *ptr,int index);
 void show_info_name(uint8_t *ptr,const char* name);
 int list_item();
 void jump(int fd,uint64_t num);
- 
- 
- //****************************************************************LIST_ITEM********************************************************************************
+void reading_election(uint8_t *ptr);
+//*******************************************************READING ELECTION**********************************************************
+
+void reading_election(uint8_t *ptr){
+
+ for(int z = 0; z < 32; z++){
+     for(int s = 0; s < 8;s++){
+       if(ptr[s] != ' '){
+        printf("%c",ptr[s]);}}
+      if(!(ptr[11] & 0x10)){
+      printf(".");
+      for(int j = 8; j < 11;j++){
+         printf("%c",ptr[j]);}
+      }else{printf("/");}
+      printf("[");
+      for(int h = 0; h < 11;h++){printf("%02X ",ptr[h]);}
+      printf("]\n");
+      break;}
+      }
+//************************************************************************************************************************************
+//***********************************************************LIST_ITEM***************************************************************
  int list_item(){
 char option[16];
 int m;
@@ -33,17 +51,11 @@ m = atoi(option);
 if(m == 0){
 break;
 }
-
 if(m > filled_sectors || m < 0 ){printf("Fuera de rango debe de elejir de el 1 a 16...\n");continue;}
-else{break;}
-}
-
-return m;
-}
-
-
-//************************************************************************************************************************************************************
-//******************************************************************FORMULA***********************************************************************************
+else{break;}}
+return m;}
+//**************************************************************************************************************************************
+//********************************************FORMULA***********************************************************************************
 uint64_t formula(uint8_t *ptr,uint64_t inicio_fat){
    
    uint64_t bytes_por_sector =  show_fat32(&ptr[11],2);           //REALIZAR OPERACIONES INVERSAS PARA OBTENER EL HEXDUMP DE UN DECIMAL
@@ -65,9 +77,8 @@ uint64_t formula(uint8_t *ptr,uint64_t inicio_fat){
       //printf("TOTAL : [%lu]\n",sectores_raiz);
     return sectores_raiz;
   }
-//****************************************************************************************************************************************************************
-
-//*******************************************************SHOW INFO************************************************************************************************
+//**************************************************************************************************************************************
+//***************************************************SHOWINFO**************************************************************************
 void show_info(uint8_t *ptr,int index){
    const char *verde = "\033[34m";
    const char *reset = "\033[0m";
@@ -80,7 +91,7 @@ void show_info(uint8_t *ptr,int index){
       if((x + 1) % 16== 0){printf("\n");}}
       }
 
-//******************************************************************SHOW INFO ROOT*****************************************************************
+//*****************************************************SHOW INFO ROOT*****************************************************************
 void show_info_root(uint8_t *ptr,int index){
    const char *verde = "\033[34m";
    const char *reset = "\033[0m";
@@ -92,72 +103,34 @@ void show_info_root(uint8_t *ptr,int index){
       printf("%s%02X%s ",color,ptr[x],color);
       if((x + 1) % 32== 0){printf("\n");
       color = verde;}
-      else{color = reset;}
-      }
-  
-      }
-//*******************************************************************SHOW_INFO_NAME****************************************************************************
+      else{color = reset;}}}
+//********************************************SHOW_INFO_NAME****************************************************************************
 void show_info_name(uint8_t *ptr,const char* name){
-printf("%s\n",name);
+
 for(int x =0; x < 512;x++){ 
-
-
-
 uint8_t *byte = &ptr[x * 32];
 if(byte[0] == 0x00){break;}
-if(byte[0] == 0xE5){/*printf("El archivo ha sido borrado\n");*/continue;}
+if(byte[0] == 0xE5){continue;}
 if(byte[11] == 0x0F){continue;}
-
-printf("Item %2d: [",filled_sectors);
-
-for(int j = 0; j < 8; j++){
-if(byte[j] != ' '){
-printf("%c",byte[j]);
- 
-}
-}
-if (!(byte[11] & 0x10)){printf(".");
-for(int j = 8 ; j < 11; j++){
-    
-    if(byte[j] != ' '){printf("%c",byte[j]);}
-
-}}
-else{printf("/");}
-
-printf("]");
-printf("          ");
-printf("[");
-for(int m = 0; m < 32; m++ ){printf("%02X ",byte[m]);
+for(int m = 0; m < 32; m++ ){
 arr_global[filled_sectors] = byte[m];
-
 filled_sectors++;
-
-}
-printf("]");
-
-printf("\n");
-printf("FilledSectors [%d]",filled_sectors);
-printf("\n");
-
-}
+}}
 }
 
-//***********************************************************************SHOWFAT32********************************************************************************
+//********************************************SHOWFAT32********************************************************************************
 uint64_t show_fat32(uint8_t *ptr,uint8_t tam){
     uint64_t out = 0;
     for(int x = 0; x < tam; x++){
        out |= (uint64_t)(ptr[x]) << (8 * x);}
     return out;}
-  //********************************************************************************************************************************************************************
-
-//********************************************************************************JUMP**********************************************************************************
+  //************************************************************************************************************************************
+//************************************************JUMP**********************************************************************************
 void jump(int fd,uint64_t num){
     lseek(fd,num,SEEK_SET);
 
 }
-//***********************************************************************************************************************************************************************
-
-
+//**************************************************************************************************************************************
 int main(){
 uint8_t arr[UNIDAD];
 const char *path = "/dev/sdb";
@@ -172,24 +145,19 @@ jump(fd,size * UNIDAD); //PRIMER SALTO HACIA FAT32 O;
  uint64_t num_sectors = show_fat32(&arr[11],2);
  
  
-  //show_info(arr,UNIDAD);
-  
-  
-  printf("Numero Convertido : %lu\n",num_sectors);
   uint64_t sectores_raiz =   formula(arr,size);
   jump(fd,sectores_raiz * UNIDAD);
   read(fd,arr,UNIDAD);
  
-int x = 0;
+
   
- for(x = 0; x < 16; x++){
-         show_info_root(arr,UNIDAD);
+ for(int x = 0; x < 16; x++){
+         
          show_info_name(arr,path);
          
       if(arr[0] == 0x00){break;}
       if(read(fd,arr,UNIDAD) != UNIDAD){break;}
-      //show_info_root(arr,UNIDAD);
-      //printf("[%d]\n ",x); 
+      
             indice[x] = x; 
       }
       
@@ -216,49 +184,17 @@ int x = 0;
      }
    
    
-   char election[16];
-   printf("Choose yuor election please very faster!!!!its time to make a choice mr Andersson...\n");
-   fgets(election,sizeof(election),stdin);
-   election[strcspn(election, "\n")] = 0;
-
-   int numero_election = atoi(election);
+   
+   int numero_election = list_item();
    
    uint8_t *re;
-   
-   /*for(int z = 0; z < filled_sectors; z++){
-   re = & arr_global[z*32];
-   printf("%d\n",numero_election);
-   numero_election--;
-   
-   if(numero_election == 0)break;
-   if(numero_election  <= z)break;
-   
-   }*/re = &arr_global[numero_election * 32];
+   re = &arr_global[numero_election * 32];
   
-   
-   printf("El numero election es de : [%d]\n",numero_election);
-  
+   reading_election(re);
    
    
    
-   //*********************************************************************************************************************
-   for(int z = 0; z < 32; z++){
-     for(int s = 0; s < 8;s++){
-       if(re[s] != ' '){
-        printf("%c",re[s]);}}
-      if(!(re[11] & 0x10)){
-      printf(".");
-      for(int j = 8; j < 11;j++){
-         printf("%c",re[j]);
-         
-         }
-      }else{printf("/");}
-      printf("[");
-      for(int h = 0; h < 11;h++){printf("%02X ",re[h]);}
-      
-      printf("]\n");
-      break;
-     }
+   
    
    
    
