@@ -11,6 +11,9 @@ int filled_sectors = 0;
 uint8_t arr_global[512*16]={0};
 uint8_t indice[16];
 uint64_t indice_global =0;
+char *rojo = "\033[31m";
+char *reset = "\033[0m";
+char *color;
 
 void arr_g(uint8_t *ptr);
 uint64_t show_fat32(uint8_t *ptr,uint8_t tam);
@@ -21,10 +24,40 @@ void show_info_name(uint8_t *ptr,const char* name);
 int list_item();
 void jump(int fd,uint64_t num);
 void reading_election(uint8_t *ptr);
+void last_time(uint8_t *ptr);
+void size_file(uint8_t *ptr);
+//******************************************SIZE FILE********************************************************************************
+void size_file(uint8_t *ptr){
+uint64_t high_cluster = show_fat32(&ptr[20],2);
+uint64_t low_cluster = show_fat32(&ptr[26],2);
+printf("HIGH CLUSTER : [%lu] LOW CLUSTER : [%lu]\n",high_cluster,low_cluster);
+}
+
+
+
+
+
+//********************************************LAST TIME ********************************************************************************
+void last_time(uint8_t *ptr){
+   uint8_t last_access[2];
+   memcpy(last_access,&ptr[18],2);
+   uint16_t convert_byte = (uint16_t)last_access[0] | ((uint16_t)last_access[1] << 8);
+   printf("ULTIMO ACCESO .. [%02X] [%02X]\n",last_access[0],last_access[1]);
+   printf("UNIFY NUMBER .. [%04X]\n",convert_byte);
+  
+   int anio = ((convert_byte >> 9) & 0x7F) + 1980;
+   int mes  = (convert_byte >> 5) & 0x0F;
+   int dia  = (convert_byte & 0x1F);
+   printf("Ultimo acceso: DD : %02d/M : %02d/Y : %d\n", dia, mes, anio);
+
+}
+
+
+
 //*******************************************************READING ELECTION**********************************************************
 
 void reading_election(uint8_t *ptr){
-
+color = reset;
  for(int z = 0; z < 32; z++){
      for(int s = 0; s < 8;s++){
        if(ptr[s] != ' '){
@@ -35,8 +68,14 @@ void reading_election(uint8_t *ptr){
          printf("%c",ptr[j]);}
       }else{printf("/");}
       printf("[");
-      for(int h = 0; h < 11;h++){printf("%02X ",ptr[h]);}
+      for(int h = 0; h < 32;h++){
+      if(h == 18 || h == 19){color = rojo;}
+      printf("%s%02X %s",color,ptr[h],color);
+      color = reset;
+      }
+      
       printf("]\n");
+      
       break;}
       }
 //************************************************************************************************************************************
@@ -130,10 +169,10 @@ void jump(int fd,uint64_t num){
     lseek(fd,num,SEEK_SET);
 
 }
-//**************************************************************************************************************************************
+//***************************************************MAIN*********************************************************************************
 int main(){
 uint8_t arr[UNIDAD];
-const char *path = "/dev/sdb";
+const char *path = "/dev/sda";
 int fd = open(path,O_RDONLY);
 ssize_t firma = read(fd,arr,UNIDAD);
 //LLAMADAS DE FUNCIONES
@@ -148,52 +187,36 @@ jump(fd,size * UNIDAD); //PRIMER SALTO HACIA FAT32 O;
   uint64_t sectores_raiz =   formula(arr,size);
   jump(fd,sectores_raiz * UNIDAD);
   read(fd,arr,UNIDAD);
- 
-
-  
  for(int x = 0; x < 16; x++){
-         
          show_info_name(arr,path);
-         
-      if(arr[0] == 0x00){break;}
-      if(read(fd,arr,UNIDAD) != UNIDAD){break;}
-      
-            indice[x] = x; 
-      }
-      
-     int indece_election = 0;
+         if(arr[0] == 0x00){break;}
+        if(read(fd,arr,UNIDAD) != UNIDAD){break;}
+          indice[x] = x; }
+      int indece_election = 0;
      for(int z = 0; z < filled_sectors; z++){
          uint8_t *lt = &arr_global[z * 32];
         if(lt[0] == 0x00){break;}
          printf("[%d]",indece_election);
-         
-         for(int y = 0; y < 8; y++){
+            for(int y = 0; y < 8; y++){
            if(lt[y] != ' '){
            printf("%c",lt[y]);}
            }
          if(!(lt[11] & 0x10)){
          printf(".");
          for(int m = 8 ;m < 11; m++){
-         printf("%c",lt[m]);
-         }
-         
-         }
+         printf("%c",lt[m]);}}
          else{printf("/");}
          printf("\n");
-         indece_election++;
-     }
-   
-   
-   
-   int numero_election = list_item();
+         indece_election++;}
+   int numero_election = list_item();    //ESTA FUNCION DEVUELVE LA OPCION DE EL USUARIO EN PANTALLA 
    
    uint8_t *re;
-   re = &arr_global[numero_election * 32];
+   re = &arr_global[numero_election * 32]; //ESTA LINEA LLENA UN ARRAY DE LOS 32 BYTE DE LA ELECCION DE EL USUARIO
   
-   reading_election(re);
+   reading_election(re);                   //REPRODUCE EN PANTALLA LA ELECCION DE EL USUARIO CON LOS PRIMEROS 11 BYTES
    
-   
-   
+    last_time(re);        //REPRODUCE EN PANTALL LA ULTIMA VEZ QUE EL USUARIO TUVO ACCESO AL ARCHIVO O FOLDER..
+    size_file(re);        
    
    
    
