@@ -221,18 +221,23 @@ int x = 0;
    fgets(election,16,stdin);
    int numero_election = atoi(election);
    
-   
+   uint8_t *re;
    
    for(int z = 0; z < filled_sectors; z++){
-   uint8_t *re = & arr_global[z*32];
-   
-   
+   re = & arr_global[z*32];
+   if(numero_election <= z)break;
+   numero_election--;
    }
+   printf("El numero election es de : [%d]\n",numero_election);
+  
    
    
    
-   
-   
+   //*********************************************************************************************************************
+   for(int z = 0; z < 32; z++){
+     
+     printf("%02X ",re[z]);
+     }
    
    
    
