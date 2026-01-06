@@ -142,7 +142,7 @@ printf("\n");
 }
 }
 
-//***********************************************************************SHOW FAT32********************************************************************************
+//***********************************************************************SHOWFAT32********************************************************************************
 uint64_t show_fat32(uint8_t *ptr,uint8_t tam){
     uint64_t out = 0;
     for(int x = 0; x < tam; x++){
@@ -160,7 +160,7 @@ void jump(int fd,uint64_t num){
 
 int main(){
 uint8_t arr[UNIDAD];
-const char *path = "/dev/sda";
+const char *path = "/dev/sdb";
 int fd = open(path,O_RDONLY);
 ssize_t firma = read(fd,arr,UNIDAD);
 //LLAMADAS DE FUNCIONES
@@ -216,18 +216,26 @@ int x = 0;
      }
    
    
-   uint8_t election[16];
+   char election[16];
    printf("Choose yuor election please very faster!!!!its time to make a choice mr Andersson...\n");
-   fgets(election,16,stdin);
+   fgets(election,sizeof(election),stdin);
+   election[strcspn(election, "\n")] = 0;
+
    int numero_election = atoi(election);
    
    uint8_t *re;
    
-   for(int z = 0; z < filled_sectors; z++){
+   /*for(int z = 0; z < filled_sectors; z++){
    re = & arr_global[z*32];
-   if(numero_election <= z)break;
+   printf("%d\n",numero_election);
    numero_election--;
-   }
+   
+   if(numero_election == 0)break;
+   if(numero_election  <= z)break;
+   
+   }*/re = &arr_global[numero_election * 32];
+  
+   
    printf("El numero election es de : [%d]\n",numero_election);
   
    
@@ -235,8 +243,21 @@ int x = 0;
    
    //*********************************************************************************************************************
    for(int z = 0; z < 32; z++){
-     
-     printf("%02X ",re[z]);
+     for(int s = 0; s < 8;s++){
+       if(re[s] != ' '){
+        printf("%c",re[s]);}}
+      if(!(re[11] & 0x10)){
+      printf(".");
+      for(int j = 8; j < 11;j++){
+         printf("%c",re[j]);
+         
+         }
+      }else{printf("/");}
+      printf("[");
+      for(int h = 0; h < 11;h++){printf("%02X ",re[h]);}
+      
+      printf("]\n");
+      break;
      }
    
    
