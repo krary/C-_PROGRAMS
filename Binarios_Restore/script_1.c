@@ -5,9 +5,15 @@
 #include<fcntl.h>
 #include<unistd.h>
 #include<string.h>
+#define UNIDAD 512
+typedef struct{
+    int fd;
+    uint64_t fat_init;
+    uint64_t lba_partition;
+}data;
+data data_st;
 
 int filled_sectors = 0;
-#define UNIDAD 512
 uint8_t arr_global[512*16]={0};
 uint8_t indice[16];
 uint64_t indice_global =0;
@@ -32,7 +38,7 @@ uint64_t high_cluster = show_fat32(&ptr[20],2);
 uint64_t low_cluster = show_fat32(&ptr[26],2);
 printf("HIGH CLUSTER : [%lu] LOW CLUSTER : [%lu]\n",high_cluster,low_cluster);
 }
-
+//hola
 
 
 
@@ -172,25 +178,25 @@ void jump(int fd,uint64_t num){
 //***************************************************MAIN*********************************************************************************
 int main(){
 uint8_t arr[UNIDAD];
-const char *path = "/dev/sda";
-int fd = open(path,O_RDONLY);
-ssize_t firma = read(fd,arr,UNIDAD);
+const char *path = "/dev/sdb";
+data_st.fd = open(path,O_RDONLY);
+ssize_t firma = read(data_st.fd,arr,UNIDAD);
 //LLAMADAS DE FUNCIONES
 
-uint64_t size = show_fat32(&arr[446 + 8],4);
+data_st.fat_init = show_fat32(&arr[446 + 8],4);
 
-jump(fd,size * UNIDAD); //PRIMER SALTO HACIA FAT32 O;
- read(fd,arr,UNIDAD);
- uint64_t num_sectors = show_fat32(&arr[11],2);
+jump(data_st.fd,data_st.fat_init * UNIDAD); //PRIMER SALTO HACIA FAT32 O;
+ read(data_st.fd,arr,UNIDAD);
+ data_st.lba_partition = show_fat32(&arr[11],2);
  
  
-  uint64_t sectores_raiz =   formula(arr,size);
-  jump(fd,sectores_raiz * UNIDAD);
-  read(fd,arr,UNIDAD);
+  uint64_t sectores_raiz =   formula(arr,data_st.fat_init);
+  jump(data_st.fd,sectores_raiz * UNIDAD);
+  read(data_st.fd,arr,UNIDAD);
  for(int x = 0; x < 16; x++){
          show_info_name(arr,path);
          if(arr[0] == 0x00){break;}
-        if(read(fd,arr,UNIDAD) != UNIDAD){break;}
+        if(read(data_st.fd,arr,UNIDAD) != UNIDAD){break;}
           indice[x] = x; }
       int indece_election = 0;
      for(int z = 0; z < filled_sectors; z++){
