@@ -88,13 +88,34 @@ static void activate(GtkApplication *app,gpointer ptr){
 	//*****************************************************************************************
 	GtkWidget *box = gtk_box_new(GTK_ORIENTATION_VERTICAL,10);
 	GtkCssProvider *provider = gtk_css_provider_new();
-	//*****************************************************************************************S
+	GtkWidget *text_view = gtk_text_view_new();
+	GtkWidget *scroll = gtk_scrolled_window_new();
+	//******************************************************************************************
 	
 	
+	//CONFIGURACION DE EL TEXT VIEW 
+	//******************************************************************************************
+	gtk_text_view_set_editable(GTK_TEXT_VIEW(text_view),FALSE);
+    gtk_text_view_set_cursor_visible(GTK_TEXT_VIEW(text_view),FALSE);
+    gtk_text_view_set_wrap_mode(GTK_TEXT_VIEW(text_view),GTK_WRAP_WORD);
+    gtk_text_view_set_left_margin(GTK_TEXT_VIEW(text_view),20);
+    gtk_text_view_set_right_margin(GTK_TEXT_VIEW(text_view),20);
+    gtk_widget_set_vexpand(text_view,TRUE);
+    gtk_widget_set_margin_top(text_view,20);
+    gtk_widget_set_margin_start(text_view,30);
+	GtkTextBuffer *buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(text_view));
+	gtk_text_buffer_set_text(buffer,
+	"THE ELEMENTS ADDS ITS GONNO SHOW UP INSIDE THE CONSOLE OF THE TERMINAL\n"
+	"FOR EXAMPLE THIS IS A LINE JUMP AT THIS TIME THE TEXTO IS SHOWING UP \n"
+	"BELLOW SO BY!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!",-1);
+	gtk_scrolled_window_set_child(GTK_SCROLLED_WINDOW(scroll),text_view);
+	gtk_widget_add_css_class(text_view,"texto_view");
+	//********************************************************************************************
 	
-	char **options = dir_usb();
+	
 	//CONFIGURACION DE EL DROPDOWN
 	//****************************************************************************************
+	char **options = dir_usb();
 	GtkWidget *dropdown = gtk_drop_down_new_from_strings((const char * const *)options);
    	gtk_widget_add_css_class(dropdown,"droppdown");
    	gtk_widget_set_halign(dropdown,GTK_ALIGN_END);
@@ -107,7 +128,15 @@ static void activate(GtkApplication *app,gpointer ptr){
     ".droppdown{ "    
     "   color: yellow;"
     "   font-size: 18px;"
-    "}");
+    "}"
+    
+    ".texto_view{ "
+    "color:yellow;"
+    "font-size:34dp;"
+    
+    "}"
+    
+    );
    gtk_style_context_add_provider_for_display(gdk_display_get_default(),GTK_STYLE_PROVIDER(provider),
    GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
    g_object_unref(provider);
@@ -121,6 +150,7 @@ static void activate(GtkApplication *app,gpointer ptr){
 		
     g_signal_connect(dropdown,"notify::selected",G_CALLBACK(on_selected_string),NULL);
     gtk_box_append(GTK_BOX(box),dropdown);
+    gtk_box_append(GTK_BOX(box),scroll);
     gtk_window_set_child(GTK_WINDOW(window),box);
 	gtk_window_present(GTK_WINDOW(window));
 	
