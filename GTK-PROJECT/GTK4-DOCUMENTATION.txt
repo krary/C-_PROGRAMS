@@ -1,0 +1,294 @@
+ELEMENTOS DE GTK4
+******************
+
+
+
+ESTRUCTURA PRINCIPAL
+*******************************************************************************************************
+#include<gtk/gtk.h>
+static void activate(GTK_APPLICATION *aplication,gpointer puntero){
+GtkWidget *window = gtk_application_window_new(GTK_APPLICATION(aplication))
+
+gtk_window_set_title(GTK_WINDOW(window),"title")
+gtk_window_set_default_size(GTK_WINDOW(window),x,y)
+
+
+//AQUI VA TODO NUESTRO CODIGO EN LA FUNCION ACTIVATE
+
+
+//AQUI FINALIZA CON LAS LINEAS DE ABAJO
+gtk_window_present(GTK_WINDOW(window))
+
+}
+int main(int argc,char argv[]){
+
+  Gtk_Application *app = gtk_application_new("ejemplo.app",G_APPLICATION_DEFAULT_FLAGS)
+  g_signal_connect(app,"activate",G_CALLBACK(activate),NULL)
+  int status = g_application_run(G_APPLICATION(app),argc,argv)
+return 0;
+}
+****************************************************************************************
+
+
+
+
+
+
+
+
+
+
+[+]TEXT-VIEW
+******************************************************************************************
+GtkWidget *text_view = gtk_text_view_new();
+GtkWidget *scroll = gtk_scrolled_window_new();
+
+gtk_text_view_set_editable(GTK_TEXT_VIEW(text_view),FALSE);
+gtk_text_view_set_cursor_visible(GTK_TEXT_VIEW(text_view),FALSE);
+gtk_text_view_set_wrap_mode(GTK_TEXT_VIEW(text_view),GTK_WRAP_WORD);
+gtk_text_view_set_left_margin(GTK_TEXT_VIEW(text_view),20);
+gtk_text_view_set_right_margin(GTK_TEXT_VIEW(text_view),20);
+
+//HAY QUE OBTENER EL BUFFER DE NUESTRO TEXTO PARA PODER METER LA INFORMACION
+GtkTextBuffer *buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(text_view));
+
+//PEGANDO EL TEXTO QUE QUEREMOS MOSTRAR EN NUESTRA APP
+gtk_text_buffer_set_text(buffer,"Texto que queremos copiar\n",-1)
+
+gtk_scrolled_window_set_child(GTK_SCROLLED_WINDOW(scrolled),text_view);
+gtk_window_set_child(GT_WINDOW(window),scrolled);
+*********************************************************************************************
+
+
+
+
+[+]PROVIDER-CSS
+********************************************************************************************
+GtkCssProvider *provider = gtk_css_provider_new()
+gtk_widget_add__css_class(objeto,"alias");
+gtk_css_provider_load_from_string(provider,".alias{"
+"color:green;" //cambia el color de la fuente
+"background-color:white;" 
+"min-width:10px;" //pos-x
+"min-hight:23px;" //pos-y
+"background-image:none;"//desactiva imagen de fondo de el boton
+"font-size:32px;" //cambia el tamaño de la fuente
+"font-style:italic;" //cambia el estilo de la funte
+"}"
+)
+
+gtk_style_context_add_provider_for_display(gdk_display_get_default(),GTK_STYLE_PROVIDER(provider),
+GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+**********************************************************************************************
+
+
+
+
+
+
+
+[+]BUTTON-EVENT
+**********************************************************************************************
+static void nombre_funcion(GtkButton *button,gponter usr){
+  //si por ejemplo queremos mostrar un texto..
+  GtkLabel *label = GTK_LABEL(usr);
+  gtk_label_set_text("Texto que queremos mostrar")}
+
+
+GtkWidget *button = gtk_button_new_with_label("Text");
+g_signal_connect(button,"clicked",G_CALLBACK(nombre_funcion),objeto_a_mutar);
+
+
+
+***********************************************************************************************
+
+
+
+[+]BOX-ALIGN
+***********************************************************************************************
+GtkWidget *box = gtk_box_new(GTK_ORIENTATION_VERTICAL,10); //los elementos se pondran unos arribas de otro con separacion de 10 px
+gtk_widget_set_halign(widget,GTK_ALIGN_END);
+gtk_widget_set_valign(widget,GTK_ALIGN_START)
+gtk_widget_set_vexpand(widget,TRUE);
+gtk_widget_set_margin_bottom(widget,19);
+gtk_widget_set_margin_top(widget,20)
+gtk_widget_set_margin_end(widget,19)
+gtk_widget_set_margin_start(widget,29)
+
+gtk_box_append(GTK_BOX(box),widget)
+gtk_window_set_child(GTK_WINDOW(window),box)
+****************************************************************************************************************
+
+
+[+]LABEL
+**************************************************************************************************************
+GtkWidget *label = gtk_label_new("texto")
+gtk_window_set_child(GT_WINDOW(window),label)
+****************************************************************************************************************
+
+
+
+
+
+
+
+
+[+]INSERTANDO TEXTO CON TIMER EN GTK
+**********************************************************************************************************
+static gboolean reprotext(gpointer objeto){
+	
+	DatosEscritura *datos = (DatosEscritura*)objeto;
+	if(datos->texto[datos->indice] != '\0'){
+		GtkTextIter iter;
+		gtk_text_buffer_get_end_iter(datos->buffer,&iter);
+		char letra[2]={datos->texto[datos->indice],'\0'};
+		gtk_text_buffer_insert(datos->buffer,&iter,letra,-1);
+		datos->indice++;
+		return G_SOURCE_CONTINUE; 
+		
+		}
+	g_free(datos);
+	G_SOURCE_REMOVE;
+		}
+		
+//LUEGO PARA LLAMAR A LA FUNCION TIMER CON LOS DATOS QUE LE PASAMOS EN NUESTRA FUNCION ACTIVATE LO HACEMOS CON:
+g_timout_add(50,nombre_funcion_sin_parentesis,datos_que_se_renuevan)		
+		
+***********************************************************************************************************
+
+
+
+
+[+]STRUCT STAT ST
+***********************************************************************************************************
+#include<sys/stat.h>
+struct stat st;
+if(stat("Programacion C.txt",&st)==0){
+	off_t tam = st.st_size;
+	char *texto = malloc(tam + 1);
+	int fd = open("Programacion C.txt", O_RDONLY);
+	read(fd,texto,tam);
+	texto[tam] = '\0';
+     datos->texto = texto;
+	
+	}
+	else{const char *texto = "Ne se pudo extraer informacion de el archivo...\0";
+		datos->texto = texto;
+}
+*************************************************************************************************************
+
+
+
+
+
+
+[+]DROP DOWN
+**************************************************************************************************************
+
+const char *options = {"Option1","Option2","Option3",NULL};
+GtkWidget *dropdown = gtk_drop_down_new(options);
+
+gtx_window_set_child(GT_WINDOW(window),dropdwon);
+**************************************************************************************************************
+
+
+
+
+
+
+[+]DRAWING LINE
+***************************************************************************************************************
+typedef struct {
+     int start_x,end_x,start_y,end_y;
+
+}ConfigDrawing;
+
+static void dibujar(Gtk_DrawingArea *drawing,cairo_t *cr,int width,int height,gpointer ptr){
+
+ConfigDrawing *config = (ConfigDrawing)ptr;
+cairo_set_source_rgb(cr,0.0,0.0,1.0);
+cairo_set_line_width(cr,1.0) //Estableciondo el grosor
+
+cairo_move_to(cr,config->start_x,config->start_y);
+cairo_line_to(cr,x,config->start_y - config->end_y); //si queremos movernos hacia abajo
+
+cairo_line_to(cr,config->start-x - config->end_x,config->start_y); //si queremos movernos hacia el lado
+cairo_stroke(cr);
+}
+LUEGO EN NUESTRA FUNCION ACTIVATE
+
+Gtk_Widget *dibujo = gtk_drawing_area_new();
+gtk_widget_set_vexpand(dibujo,TRUE);
+
+ConfigDrawing *config = g_new(ConfigDrawing,1);
+config->start_x = 0;
+config->start_y = 0;
+config->end_y = 5;
+gtk_drawing_area_set_draw_func(GTK_DRAWING_AREA(drawingarea),dibujar,config,g_free);
+gtk_window_set_child(GTK_WINDDOW(window),dibujo);
+
+*************************************************************************************************************
+
+
+
+
+
+
+[+]DIRENT-H
+*************************************************************************************************************
+DIRENT (DIR *dr) ES UN PUNTERO A UN STRUCT QUE SE USA PARA ABRIR DIRECTORIOS O CARPETAS Y LEER ARCHIVOS EN LINUX
+
+PRINCIPALES FUNCIONES +
+opendir()   ABRIR DIRECTORIOS
+
+readdir()   LEER ARCHIVOS DEL DIRECTORIO
+
+closedir()  CERRAR DIRECTORIO
+
+SI QUEREMOS LEER LOS DATOS O ALGUNAS PROPIEDADES CREAMOS UN PUNTERO HACIA DIRENT CON +
+struct dirent *de
+
+CODIGO EJEMPLO +
+
+#include<dirent.h>
+
+struct dirent *de
+DIR *dr = opendir("ejemplo/de/directorio")
+
+if(dr == NULL)printf("Error..")
+
+while((de = readdir(dr)) !=NULL)
+printf("Nombre de archivo ../%s",de->d_name)
+**************************************************************************************************************
+
+
+
+
+
+
+
+
+
+
+[+]OBTENIENDO_SELECCION_DE_DROP_DOWN
+****************************************************************************************************************
+static void on_selected_string(GtkDropDown *dropdown,GParamSpec *prspec,gpointer user_data){
+	guint selected = gtk_drop_down_get_selected(dropdown);
+	if(selected == GTK_INVALID_LIST_POSITION) return;
+	GListModel *model = gtk_drop_down_get_model(dropdown);
+	GtkStringObject *obj = g_list_model_get_item(model,selected);
+	
+	if(obj != NULL){
+		const char *texto = gtk_string_object_get_string(obj);
+		g_object_unref(obj);
+		printf("[%s]\n",texto);}
+		}	
+	DENTRO DE NUESTRO ACTIVATE +
+	g_signal_connect(dropdown,"notify::selected",G_CALLBACK(on_selected_string),NULL);
+***************************************************************************************************************
+
+
+
+
+
+
