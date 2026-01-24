@@ -5,6 +5,8 @@
 #include "dir_usb.h"
 #include "mbr.h"
 #include "showing_data.h"
+#include<glib.h>
+ Info_base *i;
 typedef struct{
 	
 	GtkTextBuffer *buffer;
@@ -19,10 +21,26 @@ typedef struct{
 	
 
 
-static void onParrafo(gpointer ptr){
+static void show_string_gtk(uint8_t *arr_,int size,GtkTextBuffer *buffer){
+	printf("DEBUG: El primer byte a mostrar es: %02X\n", arr_[0]);
+	     GString *hex_display = g_string_new("");
+         for(int x = 0; x < size;x++){
+			 
+			 g_string_append_printf(hex_display,"%02X",arr_[x]);
+			 if((x+1) % 16 == 0){
+				 g_string_append(hex_display,"\n");
+				 }
+			 
+			 }	
+	       gtk_text_buffer_set_text(buffer,hex_display->str,-1);
+	       g_string_free(hex_display,TRUE);
 	
 	}
-static void on_selected_string(GtkDropDown *dropdown,GParamSpec *prspec,gpointer user_data){
+static void on_selected_string(GtkDropDown *dropdown,
+GParamSpec *prspec,gpointer user_data){
+	 GtkTextBuffer *buffer = GTK_TEXT_BUFFER(user_data);
+	 
+	 
 	guint selected = gtk_drop_down_get_selected(dropdown);
 	if(selected == GTK_INVALID_LIST_POSITION) return;
 	GListModel *model = gtk_drop_down_get_model(dropdown);
@@ -47,9 +65,14 @@ static void on_selected_string(GtkDropDown *dropdown,GParamSpec *prspec,gpointer
 			printf("]\n");
 		  snprintf(full_path,sizeof(full_path),"%s",path); 
 		   
-		   printf("%s\n",full_path);
-		    Info_base *i = mbr_h(full_path);
-		    showing_data(i);
+		   
+		    i = mbr_h(full_path);//Inicializa i Info_base reservando memoria y dando el primer salto
+		    snprintf(i->full_path,sizeof(i->full_path),"%s",full_path);
+		    printf("%s\n",i->full_path);
+		    show_string_gtk(i->arr_global,512,buffer);
+		    //while (g_main_context_iteration(NULL, FALSE));
+
+		    //showing_data(i);
 		}
 		
 	
@@ -96,6 +119,7 @@ static void activate(GtkApplication *app,gpointer ptr){
 	//CONFIGURACION DE EL TEXT VIEW 
 	//******************************************************************************************
 	gtk_text_view_set_editable(GTK_TEXT_VIEW(text_view),FALSE);
+	gtk_text_view_set_monospace(GTK_TEXT_VIEW(text_view),TRUE);
     gtk_text_view_set_cursor_visible(GTK_TEXT_VIEW(text_view),FALSE);
     gtk_text_view_set_wrap_mode(GTK_TEXT_VIEW(text_view),GTK_WRAP_WORD);
     gtk_text_view_set_left_margin(GTK_TEXT_VIEW(text_view),20);
@@ -104,10 +128,7 @@ static void activate(GtkApplication *app,gpointer ptr){
     gtk_widget_set_margin_top(text_view,20);
     gtk_widget_set_margin_start(text_view,30);
 	GtkTextBuffer *buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(text_view));
-	gtk_text_buffer_set_text(buffer,
-	"THE ELEMENTS ADDS ITS GONNO SHOW UP INSIDE THE CONSOLE OF THE TERMINAL\n"
-	"FOR EXAMPLE THIS IS A LINE JUMP AT THIS TIME THE TEXTO IS SHOWING UP \n"
-	"BELLOW SO BY!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!",-1);
+	gtk_text_buffer_set_text(buffer,"lisandro",-1);
 	gtk_scrolled_window_set_child(GTK_SCROLLED_WINDOW(scroll),text_view);
 	gtk_widget_add_css_class(text_view,"texto_view");
 	//********************************************************************************************
@@ -148,7 +169,8 @@ static void activate(GtkApplication *app,gpointer ptr){
 	
 	
 		
-    g_signal_connect(dropdown,"notify::selected",G_CALLBACK(on_selected_string),NULL);
+    g_signal_connect(dropdown,"notify::selected",G_CALLBACK(on_selected_string),buffer);
+   
     gtk_box_append(GTK_BOX(box),dropdown);
     gtk_box_append(GTK_BOX(box),scroll);
     gtk_window_set_child(GTK_WINDOW(window),box);

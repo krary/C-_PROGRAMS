@@ -8,6 +8,7 @@
 
 typedef struct{
 	 int fd;
+	 char full_path[512];
 	 uint8_t arr_global[512];
 	 uint64_t lba_partition;
 	 uint8_t fat_num;
@@ -18,6 +19,7 @@ typedef struct{
 	 uint16_t high_cluster;
 	 uint16_t low_cluster;
 	 uint64_t region_data;
+	 
 	
 	}__attribute__((packed))Info_base;
 
