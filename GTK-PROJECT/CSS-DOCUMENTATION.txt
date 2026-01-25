@@ -1,0 +1,27 @@
+CSS-CONFIGURATION
+
+
+[+]LUCES DE NEON EFFECT
+*********************
+color: #2731F5
+font-family: Monospace;
+font-weight: bold;
+text-shadow: 0 0 5px #2731F5
+********************************
+
+
+[+]PONIENDO BORDER ALREDEDOR DE TEXTO OSEA ENCUADRARLOS
+*******************************************************
+border: 1px solid #00ff41;
+border-radius: 1px //REDONDEA LAS ESQUINAS
+******************************************
+
+
+[+]HOVER DETECTANDO MOUSE CAMBIANDO DISEÑO
+*******************************************
+".name_of_widget:hover {"
+"background: #00ff41;"
+"color: #00000000;"
+"box-shadow: 0 0 10px #00ff41;"
+"}"
+*********************************************
