@@ -1,0 +1,2 @@
+gcc window_1.c -o app `pkg-config --cflags --libs gtk+-3.0`
+
