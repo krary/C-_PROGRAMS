@@ -123,7 +123,8 @@ printf("DEBUG: LBA leída directamente: %" PRIu64 "\n", info_base->lba_partition
 static void activate(GtkApplication *app, gpointer user_data)
 {   
 	char **m = mensaje();
-	
+	char **n = nombres();
+	int numero = sizeof(n);
 	
     GtkWidget *window = gtk_application_window_new(app);
     gtk_window_set_title(GTK_WINDOW(window), "BYTE TRAVELER // ROOT_ACCESS");
@@ -168,27 +169,28 @@ static void activate(GtkApplication *app, gpointer user_data)
     gtk_text_view_set_editable(GTK_TEXT_VIEW(text_view), FALSE);
 
     //==============  BUFFER ==========================================
-    GtkWidget *lb_partition = labels(m[0],lba_p);
+   /* GtkWidget *lb_partition = labels(m[0],lba_p);
     GtkWidget *byte_por_sectores = labels(m[1],num_cluster);
     GtkWidget *sectores_reservados = labels(m[2],lba_p);
     GtkWidget *sectores_por_cluster = labels(m[3],lba_p);
     GtkWidget *sectores_por_fat = labels(m[4],lba_p);
     GtkWidget *numero_de_fat = labels(m[5],lba_p);
     GtkWidget *numero_de_cluster = labels(m[6],lba_p);
+    */
     
-      
-   
     GtkWidget *box_labels = gtk_box_new(GTK_ORIENTATION_VERTICAL,0);
-      gtk_box_append(GTK_BOX(box_labels),lb_partition);
-      gtk_box_append(GTK_BOX(box_labels),byte_por_sectores);
-      gtk_box_append(GTK_BOX(box_labels),sectores_reservados);
-      gtk_box_append(GTK_BOX(box_labels),sectores_por_cluster);
-      gtk_box_append(GTK_BOX(box_labels),sectores_por_fat);
-      gtk_box_append(GTK_BOX(box_labels),numero_de_fat);
-      gtk_box_append(GTK_BOX(box_labels),numero_de_cluster);
     
     
+    for(int x = 0; n[x] !=NULL;x++){
+		GtkWidget *llb = labels(m[x],lba_p);
+	    gtk_widget_set_name(llb,n[x]);
+	
+	    gtk_box_append(GTK_BOX(box_labels),llb);
+      	
+		}
     
+    
+    GtkWidget *labb = getWidget(box_labels,"lb_partition");
     gtk_scrolled_window_set_child(GTK_SCROLLED_WINDOW(scroll_view),box_labels);
     gtk_box_append(GTK_BOX(main_box), scroll_view);
      
@@ -306,9 +308,9 @@ static void activate(GtkApplication *app, gpointer user_data)
     );
 
 //================= ACTIONS ============================================================
-
-g_signal_connect(device_dropdown,"notify::selected",G_CALLBACK(onSettingText),lb_partition);
-
+if(labb){
+g_signal_connect(device_dropdown,"notify::selected",G_CALLBACK(onSettingText),labb);
+}
 
 
     gtk_window_present(GTK_WINDOW(window));
@@ -322,8 +324,7 @@ int main(int argc, char **argv)
             G_APPLICATION_DEFAULT_FLAGS
         );
 
-    g_signal_connect(app, "activate",
-                     G_CALLBACK(activate), NULL);
+    g_signal_connect(app, "activate",G_CALLBACK(activate), NULL);
 
     int status = g_application_run(
         G_APPLICATION(app), argc, argv
