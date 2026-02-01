@@ -58,6 +58,16 @@ char **nombres(){
 	
 	return n;
 	}
+	
+	
+	
+	uint64_t datos(){
+		static uint64_t lb = 0;
+		return lb;
+		
+		
+		
+		}
 
 
 #endif 

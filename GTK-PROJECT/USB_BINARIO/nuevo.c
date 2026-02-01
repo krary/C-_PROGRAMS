@@ -14,10 +14,10 @@ uint64_t num_cluster = 0;
 static void set_margin_all(GtkWidget *w, int m);
 static GtkWidget *labels(const char *msg,uint64_t num);
 
-static void update(GtkWidget *label,uint64_t num){
-	char **m = mensaje();
+static void update(GtkWidget *label,uint64_t num,const char *ms){
+	//char **m = mensaje();
 	char element_new[512];
-	snprintf(element_new,sizeof(element_new),"%s %lu",m[0],num);
+	snprintf(element_new,sizeof(element_new),"%s %lu",ms,num);
 	gtk_label_set_text(GTK_LABEL(label),element_new);
 	
 	
@@ -96,12 +96,40 @@ printf("DEBUG: LBA leída directamente: %" PRIu64 "\n", info_base->lba_partition
 	    char parr[512];
 	    //snprintf(parr,sizeof(parr),"lba partition: %lu",info_base->lba_partition);
 	    //gtk_label_set_text(GTK_LABEL(label),parr);
-	    update(label,info_base->lba_partition);
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
 	    
 	    
 	    printf("%lu\n",lba_p);
 	    //showing_data(info_base);
 	    jump_lba(info_base);
+	    
+	    //update(label,info_base->lba_partition,m[0]);
+	    char **m = mensaje();
+	    char **n = nombres();
+	   for(int x = 0; n[x] != NULL;x++){
+		   
+		   GtkWidget *l = getWidget(label,n[x]);
+		   if(x == 0) update(l,info_base->lba_partition,m[x]);
+		    if(x == 1) update(l,info_base->bytes_por_sectors,m[x]); 
+		    if(x == 2) update(l,info_base->sectors_saved,m[x]);
+		    if(x == 3) update(l,info_base->sectors_por_cluster,m[x]);
+		    if(x == 4) update(l,info_base->sectors_por_fat,m[x]);
+		    if(x == 5) update(l,info_base->cluster_num,m[x]);
+             if(x == 6) update(l,info_base->fat_num,m[x]);
+             if(n[x] == NULL)break;
+		   }
+	    
+	    
+	    
+	    
+	    
 	    //showing_data(info_base);
 	    printf("Numero de cluster: %lu\n",info_base->cluster_num);
 	    printf("Numero de fat .: %d\n",info_base->fat_num);
@@ -309,7 +337,9 @@ static void activate(GtkApplication *app, gpointer user_data)
 
 //================= ACTIONS ============================================================
 if(labb){
-g_signal_connect(device_dropdown,"notify::selected",G_CALLBACK(onSettingText),labb);
+g_signal_connect(device_dropdown,"notify::selected",G_CALLBACK(onSettingText),box_labels);
+
+
 }
 
 
