@@ -272,6 +272,15 @@ static void activate(GtkApplication *app, gpointer user_data)
         "  font-family: 'Monospace'; "
         "  font-weight: bold; "
         "  text-shadow: 0 0 15px #00ff41; "
+        //"border: 5px solid #2731F5;"
+        //"border-radius: 14px;" 
+        "}"
+        ".texto_config:hover{"
+          "border: 1px solid #00ff41;"
+           "margin: 1px;"
+           "color: #00ff41;"
+           "font-size:23px;"
+        
         "}"
         
         ".data { "
