@@ -97,24 +97,32 @@ char **nombres(){
     for (int x = 0; x < 16; x++) {
         uint8_t *entry = &ptr[x * 32];
 
-        // Si la entrada está vacía, saltamos a la siguiente (no usamos break aún)
         if (entry[0] == 0x00) continue; 
-        // Si está borrado, saltamos
         if (entry[0] == 0xE5) continue;
+        if (entry[11] == 0x0F) continue; // Ignorar nombres largos
 
-        // Copiamos los 8 bytes del nombre
+        // 1. Copiar NOMBRE (8 bytes)
         for (int j = 0; j < 8; j++) {
-            // SOLO añadimos si no es nulo y no es un espacio molesto
             if (entry[j] != 0x00 && entry[j] != ' ') {
                 g_string_append_c(w_, entry[j]);
             }
         }
-        
-        // Añadimos un separador para verlos todos
+
+        // 2. Manejar EXTENSIÓN o DIRECTORIO
+        if (!(entry[11] & 0x10)) { // Es un ARCHIVO
+            g_string_append(w_, ".");
+            for (int j = 8; j < 11; j++) {
+                // FILTRO CRUCIAL: No copiar espacios ni nulos de la extensión
+                if (entry[j] != 0x00 && entry[j] != ' ') {
+                    g_string_append_c(w_, entry[j]);
+                }
+            }
+        } else { // Es un DIRECTORIO
+            g_string_append(w_, "/");
+        }
+
         g_string_append(w_, "\n");
     }
-
     return w_;
-}
-
+}	
 #endif 
