@@ -44,6 +44,19 @@ void jump_lba(Info_base *i){
 	
 	
 	}
+	
+	void jump_regiondata(Info_base *i){
+		
+		uint64_t r_ = i->sectors_saved +(i->fat_num * i->sectors_por_fat) + i->lba_partition;
+		lseek(i->fd,r_ * 512,SEEK_SET);
+		read(i->fd,i->arr_global,512);
+		
+		
+		
+		}
+		
+	
+	
 
 
 

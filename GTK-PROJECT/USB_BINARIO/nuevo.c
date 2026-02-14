@@ -14,6 +14,13 @@ uint64_t num_cluster = 0;
 static void set_margin_all(GtkWidget *w, int m);
 static GtkWidget *labels(const char *msg,uint64_t num);
 
+
+static void update_buffer(GtkTextBuffer *widget,GString *s){
+	
+	
+	
+	gtk_text_buffer_set_text(widget,s->str,-1);
+	}
 static void update(GtkWidget *label,uint64_t num,const char *ms){
 	//char **m = mensaje();
 	char element_new[512];
@@ -91,28 +98,15 @@ printf("DEBUG: LBA leída directamente: %" PRIu64 "\n", info_base->lba_partition
 	    
 	    
 	    
-	    //ACTUALIZANDO LA VARIABLE lba_p
 	    
-	    char parr[512];
-	    //snprintf(parr,sizeof(parr),"lba partition: %lu",info_base->lba_partition);
-	    //gtk_label_set_text(GTK_LABEL(label),parr);
-	    
-	    
-	    
-	    
-	    
-	    
-	    
-	    
-	    
+	    char **m = mensaje();
+	    char **n = nombres();
 	    
 	    printf("%lu\n",lba_p);
 	    //showing_data(info_base);
 	    jump_lba(info_base);
-	    
-	    //update(label,info_base->lba_partition,m[0]);
-	    char **m = mensaje();
-	    char **n = nombres();
+	    //showing_data(info_base);
+	    update(label,info_base->lba_partition,m[0]);
 	   for(int x = 0; n[x] != NULL;x++){
 		   
 		   GtkWidget *l = getWidget(label,n[x]);
@@ -138,13 +132,22 @@ printf("DEBUG: LBA leída directamente: %" PRIu64 "\n", info_base->lba_partition
 	    printf("Sectores por cluster .: %lu\n",info_base->sectors_por_cluster);
 	    printf("Byte por sectores .: %lu\n",info_base->bytes_por_sectors);
 	             
-	            
+	    jump_regiondata(info_base);//AQUI YA LA FUNCION HACE EL SALTO A LOS SECTORES DE LOS CLUSTER DE INFO
+	    showing_string(info_base);//AQUI SE LLENA LA FUNCION ARR_FOLDER;
 	    
-		}
+	    //provisional(info_base);
+	        
+	    //CHANGE...
+	    GtkTextBuffer *buff = getbuffer(label);
+	    GString *msg_buffer = words_convert(info_base->arr_global_folder);
+	    
+	    printf("THE FOLDER IS: %s\n",msg_buffer->str);
+	    update_buffer(buff,msg_buffer); 
+	    
 	
 	}
 
-
+}
 
 
 
@@ -195,17 +198,22 @@ static void activate(GtkApplication *app, gpointer user_data)
     GtkWidget *text_view = gtk_text_view_new();
     gtk_text_view_set_monospace(GTK_TEXT_VIEW(text_view), TRUE);
     gtk_text_view_set_editable(GTK_TEXT_VIEW(text_view), FALSE);
-
-    //==============  BUFFER ==========================================
-   /* GtkWidget *lb_partition = labels(m[0],lba_p);
-    GtkWidget *byte_por_sectores = labels(m[1],num_cluster);
-    GtkWidget *sectores_reservados = labels(m[2],lba_p);
-    GtkWidget *sectores_por_cluster = labels(m[3],lba_p);
-    GtkWidget *sectores_por_fat = labels(m[4],lba_p);
-    GtkWidget *numero_de_fat = labels(m[5],lba_p);
-    GtkWidget *numero_de_cluster = labels(m[6],lba_p);
-    */
     
+    
+    GtkTextBuffer *buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(text_view));
+    gtk_text_buffer_set_text(buffer,"Software Engineering.. \n",-1);
+   
+        
+    
+    
+    //==============  BUFFER ==========================================
+   
+    
+   
+   
+   
+   
+   //=================================================================== 
     GtkWidget *box_labels = gtk_box_new(GTK_ORIENTATION_VERTICAL,0);
     
     
@@ -217,6 +225,8 @@ static void activate(GtkApplication *app, gpointer user_data)
       	
 		}
     
+    
+    gtk_box_append(GTK_BOX(box_labels),text_view);
     
     GtkWidget *labb = getWidget(box_labels,"lb_partition");
     gtk_scrolled_window_set_child(GTK_SCROLLED_WINDOW(scroll_view),box_labels);

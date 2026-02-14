@@ -11,16 +11,18 @@ typedef struct{
 	 ssize_t r; //lleno
 	 char full_path[512]; //lleno
 	 uint8_t arr_global[512]; //lleno
+	 uint8_t *arr_global_folder;
 	 uint64_t lba_partition; //lleno
 	 uint64_t cluster_num; //lleno
 	 uint8_t fat_num;  //lleno
-         uint64_t bytes_por_sectors;
+     uint64_t bytes_por_sectors;
 	 uint64_t sectors_por_fat; //lleno
 	 uint64_t sectors_por_cluster; //lleno
 	 uint64_t sectors_saved;    //lleno
 	 uint16_t high_cluster;
 	 uint16_t low_cluster;
 	 uint64_t region_data;
+	 int tam_folder;
 	 
 	
 	}__attribute__((packed))Info_base;

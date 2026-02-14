@@ -1,5 +1,8 @@
 #include<stdio.h>
 #include<stdlib.h>
+#include<string.h>
+#include<unistd.h>
+#include<stdint.h>
 #include "config_datos.h"
 #ifndef SHOWING_DATA_H
 #define SHOWING_DATA_H
@@ -13,4 +16,57 @@ void showing_data(Info_base *i){
   }
 
 }
+
+
+void showing_string(Info_base *b){
+
+  b->arr_global_folder = calloc(512,sizeof(uint8_t));
+  memcpy(b->arr_global_folder,b->arr_global,512);
+  for(int x = 0;x<16;x++ ){
+  if((x+1) %32 == 0)printf("\n");
+
+uint8_t *byte = &b->arr_global_folder[x*32];
+
+  if(byte[0] == 0x00)break;
+  if(byte[0] == 0xE5)continue;
+  if(byte[11] == 0x0F)continue;
+  for(int j = 0; j < 8; j++){
+   if(byte[j] != ' ')printf("%c",byte[j]);}
+  if(!(byte[11] & 0x10)){
+     printf(".");
+    for(int j = 8; j < 11;j++)printf("%c",byte[j]);
+
+
+  }else{printf("/");}
+    printf("\n");
+
+}
+
+ 	
+
+}
+	
+	void provisional(Info_base *i){
+		
+		for(int x =0; x< 512;x++){
+			if((x+1) % 32 ==0)printf("\n");
+			uint8_t *byte = &i->arr_global_folder[x*32];
+			for(int j = 0; j < 8;j++){
+				printf("%c",byte[j]);} 
+				if( !(byte[11] & 0x10)){
+					printf(".");
+					for(int j = 8; j<11; j++){
+					   printf("%c",byte[j]);
+						
+						}
+					}else{printf("/");}
+			
+			
+			}
+		
+		}
+	
+	
+	
+	
 #endif

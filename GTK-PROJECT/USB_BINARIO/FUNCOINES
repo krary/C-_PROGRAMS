@@ -1,0 +1,7 @@
+FUNCIONES DE EL PROYECTO nuevo.c*.
+
+====================FUNCTION UPDATE======================================
+static void update(GtkWidget *label,uint64_t num,const char *ms)
+ESTA FUNCION ACTUALIZA LOS DATOS DE EL STRUCT config_datos.h
+CREANDO UN MENSAJE NUEVO Y METIENDOLO DENTRO DE LE *label CON:
+snprintf()
