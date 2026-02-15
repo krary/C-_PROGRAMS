@@ -7,6 +7,7 @@
 #include "utilidades.h"
 #include<inttypes.h>
 Info_base *info_base;
+bool state_sp;
 uint64_t lba_p = 0;
 uint64_t num_cluster = 0;
 //char **m = mensaje();	
@@ -62,7 +63,12 @@ static void set_margin_all(GtkWidget *w, int m)
     gtk_widget_set_margin_end(w, m);
 }
 static void onSettingText(GtkDropDown *dropdown,GParamSpec *spec,gpointer ptr){
-	GtkWidget *label = GTK_WIDGET(ptr);
+	//GtkWidget *label = GTK_WIDGET(ptr);
+	CallBack *c_back = (CallBack*)ptr;
+	GtkWidget *label = c_back->box;
+	GtkWidget *spinner = c_back->spinner;
+	
+	
 	guint selected = gtk_drop_down_get_selected(dropdown);
 	if(selected == 0 || selected == GTK_INVALID_LIST_POSITION)return;
 	GListModel *model = gtk_drop_down_get_model(dropdown);
@@ -94,7 +100,7 @@ printf("DEBUG: LBA leída directamente: %" PRIu64 "\n", info_base->lba_partition
 	    snprintf(info_base->full_path,sizeof(info_base->full_path),"%s",ultimate_path);
 	    //CURRENT DATA.....
 	    lba_p = info_base->lba_partition;  //AQUI CAMBIA EL VALOR DE lba_p PARA MOSTRAR EN PANTALLA
-	    
+	    if(info_base->lba_partition > 0)state_sp = true;
 	    
 	    
 	    
@@ -143,6 +149,7 @@ printf("DEBUG: LBA leída directamente: %" PRIu64 "\n", info_base->lba_partition
 	    
 	    printf("THE FOLDER IS: %s\n",msg_buffer->str);
 	    update_buffer(buff,msg_buffer); 
+	    g_idle_add(ui_stop,spinner);
 	    
 	
 	}
@@ -170,19 +177,26 @@ static void activate(GtkApplication *app, gpointer user_data)
     GtkWidget *header_box = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 12);
     set_margin_all(header_box, 20);
 
-    GtkWidget *lbl_info = gtk_label_new("› SECTOR_LBA: 00000000");
+    GtkWidget *lbl_info = gtk_label_new("› PLEASE SELECT A DEVICE ... ");
     gtk_widget_add_css_class(lbl_info, "neon-text");
    
 
-    GtkWidget *spacer = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
-    gtk_widget_set_hexpand(spacer, TRUE);
-    gtk_box_append(GTK_BOX(header_box), spacer);
+    GtkWidget *spinner = gtk_spinner_new();
+    set_margin_all(spinner,10);
+    //gtk_widget_set_hexpand(spinner, TRUE);
+    gtk_box_append(GTK_BOX(header_box),lbl_info);
+    
+    
+    gtk_box_append(GTK_BOX(header_box), spinner);
+    gtk_spinner_start(GTK_SPINNER(spinner));
+    GtkWidget *spacer = gtk_box_new(GTK_ORIENTATION_HORIZONTAL,0);
+    gtk_widget_set_hexpand(spacer,TRUE);
+    gtk_box_append(GTK_BOX(header_box),spacer);
 
     char **devices = dir_usb();
 
     GtkWidget *device_dropdown = gtk_drop_down_new_from_strings((const char * const *)devices);
     gtk_widget_add_css_class(device_dropdown, "cyber-button");
-    
     gtk_box_append(GTK_BOX(header_box), device_dropdown);
 
     gtk_box_append(GTK_BOX(main_box), header_box);
@@ -285,13 +299,13 @@ static void activate(GtkApplication *app, gpointer user_data)
         //"border: 5px solid #2731F5;"
         //"border-radius: 14px;" 
         "}"
-        ".texto_config:hover{"
+       /* ".texto_config:hover{"
           "border: 1px solid #00ff41;"
            "margin: 1px;"
            "color: #00ff41;"
            "font-size:23px;"
         
-        "}"
+        "}"*/
         
         ".data { "
         "  color: #00ff41; "
@@ -302,9 +316,10 @@ static void activate(GtkApplication *app, gpointer user_data)
 
         "textview { "
         "  background-color: #000000; "
-        "  color: #00ff41; "
+        "  color: #A88E8D; "
         "  font-size: 14pt; "
         "}"
+        
 
         ".neon-border { "
         "  border: 1px solid #00ff41; "
@@ -355,8 +370,15 @@ static void activate(GtkApplication *app, gpointer user_data)
     );
 
 //================= ACTIONS ============================================================
+
+
+CallBack *callback = g_malloc(sizeof(CallBack));
+callback->box = box_labels;
+callback->spinner = spinner;
+
+
 if(labb){
-g_signal_connect(device_dropdown,"notify::selected",G_CALLBACK(onSettingText),box_labels);
+g_signal_connect(device_dropdown,"notify::selected",G_CALLBACK(onSettingText),callback);
 
 
 }

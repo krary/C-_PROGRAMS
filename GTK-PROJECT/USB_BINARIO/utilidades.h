@@ -6,6 +6,16 @@
 #ifndef UTILIDADES_H
 #define  UTILIDADES_H
 
+static gboolean ui_stop(gpointer pointer){
+	
+	GtkWidget *spinner = GTK_WIDGET(pointer);
+	gtk_spinner_stop(GTK_SPINNER(spinner));
+	
+	return FALSE;
+	
+}
+
+
 GtkTextBuffer *getbuffer(GtkWidget *box){
 	
 	GtkWidget *child = gtk_widget_get_first_child(box);

@@ -3,10 +3,12 @@
 #include<stdint.h>
 #include<stdbool.h>
 #include<fcntl.h>
+#include<stdbool.h>
 #ifndef CONFIG_DATOS_H
 #define CONFIG_DATOS_H
 //Hi this is just a test if the changes can hold it into this file 
 typedef struct{
+	 
 	 int fd;   //lleno
 	 ssize_t r; //lleno
 	 char full_path[512]; //lleno
@@ -26,5 +28,17 @@ typedef struct{
 	 
 	
 	}__attribute__((packed))Info_base;
+
+
+typedef struct {GtkWidget *spinner;bool state_spinner;}THreadspinner;
+
+
+typedef struct{GtkWidget *box;GtkWidget *spinner;}CallBack;
+
+
+
+
+
+
 
 #endif
