@@ -33,7 +33,7 @@ typedef struct{
 typedef struct {GtkWidget *spinner;bool state_spinner;}THreadspinner;
 
 
-typedef struct{GtkWidget *box;GtkWidget *spinner;}CallBack;
+typedef struct{GtkWidget *box,*box_buffer;GtkWidget *spinner;}CallBack;
 
 
 
