@@ -130,11 +130,11 @@ static void onSettingText(GtkDropDown *dropdown,GParamSpec *spec,gpointer ptr){
 		 
 		 GtkGesture *click = gtk_gesture_click_new();
 		 g_signal_connect(click,"pressed",G_CALLBACK(onGesture),NULL);
-		 gtk_widget_add_controller(label_f,GTK_EVENT_CONTROLLER(click));
+		 if(s > 0){
+			 gtk_widget_add_controller(label_f,GTK_EVENT_CONTROLLER(click));
+		     gtk_box_append(GTK_BOX(c_back->box_buffer),label_f);  //<<<<<------------|
+     }
 		 
-		 
-		 gtk_box_append(GTK_BOX(c_back->box_buffer),label_f);  //<<<<<------------|
-     
 		 
 		 }
      

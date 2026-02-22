@@ -148,7 +148,7 @@ char **nombres(){
         if (entry[0] == 0x00) continue; 
         if (entry[0] == 0xE5) continue;
         if (entry[11] == 0x0F) continue; // Ignorar nombres largos
-
+        
         // 1. Copiar NOMBRE (8 bytes)
         for (int j = 0; j < 8; j++) {
             if (entry[j] != 0x00 && entry[j] != ' ') {
