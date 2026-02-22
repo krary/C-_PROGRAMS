@@ -15,6 +15,24 @@ static gboolean ui_stop(gpointer pointer){
 	
 }
 
+static void limpiar_box(GtkWidget *box){
+	
+	GtkWidget *child = gtk_widget_get_first_child(box);
+	while(child != NULL){
+		
+		const char *nachme = gtk_widget_get_name(child);
+		GtkWidget *next = gtk_widget_get_next_sibling(child);
+		
+		printf("Removing [%s]\n",nachme);
+		if(strcmp(nachme,"label_folder") != 0){
+			gtk_box_remove(GTK_BOX(box),child);
+			}
+			child = next;
+		}
+	
+	}
+
+
 
 GtkTextBuffer *getbuffer(GtkWidget *box){
 	
@@ -133,6 +151,33 @@ char **nombres(){
 
         g_string_append(w_, "\n");
     }
-    return w_;
-}	
+    
+   return w_;
+}
+
+
+  char **folder(GString *s){
+   int l_contador = 0;	
+   if(s == NULL){
+		printf("EL TEXTO ES NULO\n");
+		return NULL;}
+	
+	char **lineas = g_strsplit(s->str,"\n",-1);
+	for(int x =0; lineas[x] !=NULL;x++){
+		
+		printf("FOLDER: %s\n",lineas[x]);
+		}
+	return lineas;
+	}
+
+
+
+
+
+
+
+
+
+
+	
 #endif 

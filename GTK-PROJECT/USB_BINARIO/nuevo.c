@@ -113,7 +113,24 @@ static void onSettingText(GtkDropDown *dropdown,GParamSpec *spec,gpointer ptr){
 
         GtkTextBuffer *buff = getbuffer(bx_buffer);//OJO EN ESTA LINEA
         GString *msg_buffer = words_convert(info_base->arr_global_folder);
-
+        
+        //Actualizacion de los labels de carpeta y creacion de los mismos   
+        
+        char **f = folder(msg_buffer);
+         limpiar_box(c_back->box_buffer);
+        for(int s = 0; f[s] != NULL; s++){
+		
+		 GtkWidget *label_f = gtk_label_new(f[s]);
+		 gtk_widget_add_css_class(label_f,"label_f_");
+		 gtk_widget_set_name(label_f,f[s]);
+		 gtk_box_append(GTK_BOX(c_back->box_buffer),label_f);  //<<<<<------------|
+     
+		 
+		 }
+     
+        
+        
+           
         update_buffer(buff,msg_buffer);
 
         g_idle_add(ui_stop,spinner);
@@ -173,6 +190,7 @@ static void activate(GtkApplication *app, gpointer user_data){
     gtk_widget_add_css_class(box_info,"box_info_");
 
     GtkWidget *label_mbr = gtk_label_new("1. MBR / LBA INFORMATION");
+    gtk_widget_set_name(label_mbr,"label_mbr");
     gtk_widget_add_css_class(label_mbr,"label_mbr_");
 
     gtk_box_append(GTK_BOX(box_info),label_mbr);
@@ -189,19 +207,13 @@ static void activate(GtkApplication *app, gpointer user_data){
     gtk_widget_add_css_class(box_folder,"box_folder_");
 
     GtkWidget *label_folder = gtk_label_new("2. DIRECTORY STRUCTURE");
+    gtk_widget_set_name(label_folder,"label_folder");
     gtk_widget_add_css_class(label_folder,"label_folder_");
-
-    GtkWidget *text_view = gtk_text_view_new();
-    gtk_text_view_set_monospace(GTK_TEXT_VIEW(text_view), TRUE);
-    gtk_text_view_set_editable(GTK_TEXT_VIEW(text_view), FALSE);
-    gtk_widget_set_vexpand(text_view, TRUE);
-
-    GtkTextBuffer *buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(text_view));
-    gtk_text_buffer_set_text(buffer,"Waiting for device...\n",-1);
-
     gtk_box_append(GTK_BOX(box_folder),label_folder);
-    gtk_box_append(GTK_BOX(box_folder),text_view);
-
+     
+    
+    
+    
     gtk_box_append(GTK_BOX(content_box),box_info);
     gtk_box_append(GTK_BOX(content_box),box_folder);
 
@@ -230,7 +242,7 @@ static void activate(GtkApplication *app, gpointer user_data){
 
     /* ================= CSS ================= */
 
-    GtkCssProvider *provider = gtk_css_provider_new();
+    GtkCssProvider *provider = gtk_css_provider_new();	
 
     gtk_css_provider_load_from_string(provider,
     "window { background-image: linear-gradient(to bottom, #050505, #0b0f14); }"
@@ -239,6 +251,7 @@ static void activate(GtkApplication *app, gpointer user_data){
     ".box_info_, .box_folder_ { background:rgba(0,20,15,0.6); border:1px solid rgba(0,255,136,0.2); border-radius:6px; padding:10px; }"
     ".label_mbr_, .label_folder_ { color:#00ffaa; font-weight:bold; }"
     ".texto_config { color:#00ff88; font-size:13px; }"
+    ".label_f_:hover { background:#00ff88; color:#000; }"  
     "textview { background:#0a0f14; color:#8affd1; border-radius:6px; padding:10px; }"
     ".cyber-button { background:#0f141a; color:#00ff88; border:1px solid rgba(0,255,136,0.4); border-radius:6px; padding:6px 18px; }"
     ".cyber-button:hover { background:#00ff88; color:#000; }"
