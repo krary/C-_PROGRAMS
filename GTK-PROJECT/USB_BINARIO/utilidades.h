@@ -6,6 +6,19 @@
 #ifndef UTILIDADES_H
 #define  UTILIDADES_H
 
+
+static void onEvent(GtkEventControllerMotion *controller,double x,double y,gpointer pointer){
+	GtkWidget *widget = gtk_event_controller_get_widget(GTK_EVENT_CONTROLLER(controller));
+	const char *msg = gtk_label_get_text(GTK_LABEL(widget)); 
+	
+	if(msg !=NULL && strlen(msg) > 0)printf("LABEL [%s]\n",msg);
+	
+	}
+
+
+
+
+
 static gboolean ui_stop(gpointer pointer){
 	
 	GtkWidget *spinner = GTK_WIDGET(pointer);

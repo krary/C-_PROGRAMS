@@ -123,6 +123,13 @@ static void onSettingText(GtkDropDown *dropdown,GParamSpec *spec,gpointer ptr){
 		 GtkWidget *label_f = gtk_label_new(f[s]);
 		 gtk_widget_add_css_class(label_f,"label_f_");
 		 gtk_widget_set_name(label_f,f[s]);
+		 
+		 GtkEventController *controller = gtk_event_controller_motion_new();
+		 g_signal_connect(controller,"enter",G_CALLBACK(onEvent),NULL);
+		 gtk_widget_add_controller(label_f,controller);
+		 
+		 
+		 
 		 gtk_box_append(GTK_BOX(c_back->box_buffer),label_f);  //<<<<<------------|
      
 		 
