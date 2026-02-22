@@ -5,7 +5,14 @@
 
 #ifndef UTILIDADES_H
 #define  UTILIDADES_H
-
+static void onGesture(GtkGestureClick *gesture,int n_press,double x,double y,gpointer pointer){
+	GtkWidget *label = gtk_event_controller_get_widget(GTK_EVENT_CONTROLLER(gesture));
+	const char *msg = gtk_label_get_text(GTK_LABEL(label)); 
+	
+	if(msg !=NULL && strlen(msg) > 0)printf("LABEL [%s]\n",msg);
+		
+	
+	}
 
 static void onEvent(GtkEventControllerMotion *controller,double x,double y,gpointer pointer){
 	GtkWidget *widget = gtk_event_controller_get_widget(GTK_EVENT_CONTROLLER(controller));
