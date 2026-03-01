@@ -31,7 +31,7 @@ static void margen(GtkWidget *w,int m){
     
 	
 	static void activate(GtkApplication *app,gpointer ptr){
-	GtkWidget *window = gtk_application_window_new(GTK_APPLICATION(app));
+	GtkWidget *window = gtk_application_window_new(GTK_APPL ICATION(app));
 	gtk_window_set_title(GTK_WINDOW(window),"Testing...");
 	gtk_window_set_default_size(GTK_WINDOW(window),1000,700);
      

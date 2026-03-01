@@ -2,14 +2,37 @@
 #include<stdlib.h>
 #include<gtk/gtk.h> 
 #include<inttypes.h>
-
+#include<string.h>
+#include "showing_data.h"
 #ifndef UTILIDADES_H
 #define  UTILIDADES_H
+
+void comp_l(Info_base* i,const char *l_){
+	provisional(i,l_);
+     	
+	}
+	
+	
+
+
+
+
+
+
 static void onGesture(GtkGestureClick *gesture,int n_press,double x,double y,gpointer pointer){
+	
 	GtkWidget *label = gtk_event_controller_get_widget(GTK_EVENT_CONTROLLER(gesture));
 	const char *msg = gtk_label_get_text(GTK_LABEL(label)); 
+	Info_base *info_ = (Info_base*)pointer;
 	
-	if(msg !=NULL && strlen(msg) > 0)printf("LABEL [%s]\n",msg);
+	
+	if(msg !=NULL && strlen(msg) > 0){
+		g_free(info_->copia_texto_label);
+		info_->copia_texto_label = g_strdup(msg);
+		comp_l(info_,msg);
+		
+		
+		}
 		
 	
 	}
@@ -18,7 +41,11 @@ static void onEvent(GtkEventControllerMotion *controller,double x,double y,gpoin
 	GtkWidget *widget = gtk_event_controller_get_widget(GTK_EVENT_CONTROLLER(controller));
 	const char *msg = gtk_label_get_text(GTK_LABEL(widget)); 
 	
-	if(msg !=NULL && strlen(msg) > 0)printf("LABEL [%s]\n",msg);
+	if(msg !=NULL && strlen(msg) > 0){
+		
+		//printf("LABEL [%s]\n",msg);
+		
+		}
 	
 	}
 
@@ -145,7 +172,7 @@ char **nombres(){
     for (int x = 0; x < 16; x++) {
         uint8_t *entry = &ptr[x * 32];
 
-        if (entry[0] == 0x00) continue; 
+        if (entry[0] == 0x00) break; 
         if (entry[0] == 0xE5) continue;
         if (entry[11] == 0x0F) continue; // Ignorar nombres largos
         
@@ -183,10 +210,10 @@ char **nombres(){
 		return NULL;}
 	
 	char **lineas = g_strsplit(s->str,"\n",-1);
-	for(int x =0; lineas[x] !=NULL;x++){
+/*	for(int x =0; lineas[x] !=NULL;x++){
 		
 		printf("FOLDER: %s\n",lineas[x]);
-		}
+		}*/
 	return lineas;
 	}
 

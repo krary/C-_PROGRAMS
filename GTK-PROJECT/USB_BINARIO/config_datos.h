@@ -8,7 +8,7 @@
 #define CONFIG_DATOS_H
 //Hi this is just a test if the changes can hold it into this file 
 typedef struct{
-	 
+	 char *copia_texto_label;
 	 int fd;   //lleno
 	 ssize_t r; //lleno
 	 char full_path[512]; //lleno
@@ -24,6 +24,7 @@ typedef struct{
 	 uint16_t high_cluster;
 	 uint16_t low_cluster;
 	 uint64_t region_data;
+	 
 	 int tam_folder;
 	 
 	

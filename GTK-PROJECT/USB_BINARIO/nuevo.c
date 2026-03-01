@@ -118,29 +118,34 @@ static void onSettingText(GtkDropDown *dropdown,GParamSpec *spec,gpointer ptr){
         
         char **f = folder(msg_buffer);
          limpiar_box(c_back->box_buffer);
+         info_base->copia_texto_label = NULL;
         for(int s = 0; f[s] != NULL; s++){
 		
 		 GtkWidget *label_f = gtk_label_new(f[s]);
 		 gtk_widget_add_css_class(label_f,"label_f_");
 		 gtk_widget_set_name(label_f,f[s]);
 		 
-		 //GtkEventController *controller = gtk_event_controller_motion_new();
-		 //g_signal_connect(controller,"enter",G_CALLBACK(onEvent),NULL);
-		 //gtk_widget_add_controller(label_f,controller);
+		 
 		 
 		 GtkGesture *click = gtk_gesture_click_new();
-		 g_signal_connect(click,"pressed",G_CALLBACK(onGesture),NULL);
+		 
+		 g_signal_connect(click,"pressed",G_CALLBACK(onGesture),info_base);
+			 
 		 if(s > 0){
 			 gtk_widget_add_controller(label_f,GTK_EVENT_CONTROLLER(click));
+			 
 		     gtk_box_append(GTK_BOX(c_back->box_buffer),label_f);  //<<<<<------------|
-     }
-		 
-		 
+		     }
 		 }
-     
+     if(info_base->copia_texto_label !=NULL){
+		 printf("%s\n",info_base->copia_texto_label);
+		 //comp_l(info_base);
+           }
         
         
-           
+        
+        
+        
         update_buffer(buff,msg_buffer);
 
         g_idle_add(ui_stop,spinner);
