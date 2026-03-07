@@ -54,7 +54,10 @@ static void onSettingText(GtkDropDown *dropdown,GParamSpec *spec,gpointer ptr){
     GtkWidget *label = c_back->box;
     GtkWidget *bx_buffer = c_back->box_buffer;
     GtkWidget *box_item = c_back->box_item;
-   
+    
+    GtkApplication *app = c_back->app;  
+
+       
     limpiar_box(box_item);
     GtkWidget *spinner = c_back->spinner;
     
@@ -165,6 +168,7 @@ static void activate(GtkApplication *app, gpointer user_data){
 
     char **m = mensaje();
     char **n = nombres();
+    
 
     GtkWidget *window = gtk_application_window_new(app);
     gtk_window_set_title(GTK_WINDOW(window), "BYTE TRAVELER // ROOT_ACCESS");
@@ -293,15 +297,16 @@ static void activate(GtkApplication *app, gpointer user_data){
         GTK_STYLE_PROVIDER(provider),
         GTK_STYLE_PROVIDER_PRIORITY_APPLICATION
     );
-
-    CallBack *callback = g_malloc(sizeof(CallBack));
+    
+    CallBack *callback = calloc(1,sizeof(CallBack));
     callback->box = box_info;
     callback->box_buffer = box_folder;
     callback->box_item = box_folder_item;
     callback->spinner = spinner;
-
+    callback->app = app;
+   
     g_signal_connect(device_dropdown,"notify::selected",G_CALLBACK(onSettingText),callback);
-
+    
     gtk_window_present(GTK_WINDOW(window));
 }
 

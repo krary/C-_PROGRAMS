@@ -37,7 +37,10 @@ typedef struct{
 	}__attribute__((packed))Info_base;
 
 
-typedef struct{GtkWidget *box,*box_buffer,*box_item;Info_base *info_base;GtkWidget *spinner;}CallBack;
+typedef struct{
+	GtkWidget *box,*box_buffer,*box_item,*window_2;
+	Info_base *info_base;GtkBuilder *builder;GtkWidget *spinner;GtkApplication *app;
+	}CallBack;
 
 
 

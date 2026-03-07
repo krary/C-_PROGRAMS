@@ -9,7 +9,20 @@
 #define  UTILIDADES_H
 static void limpiar_box(GtkWidget *box);
 
-
+void make_window(CallBack *c_){
+	
+	if(c_->window_2 != NULL &&GTK_IS_WINDOW(c_->window_2)){	
+		gtk_window_destroy(GTK_WINDOW(c_->window_2));
+		c_->window_2 = NULL;}
+	
+	c_->builder = gtk_builder_new_from_file("window_2.ui");
+	c_->window_2 = GTK_WIDGET(gtk_builder_get_object(c_->builder,"window_2"));
+	
+	
+	gtk_window_set_application(GTK_WINDOW(c_->window_2),c_->app);
+	gtk_window_present(GTK_WINDOW(c_->window_2));
+	g_object_unref(c_->builder);
+	}
 
 void comp_l(Info_base* i,const char *l_){
 	provisional(i,l_);
@@ -33,6 +46,7 @@ static void onGesture(GtkGestureClick *gesture,int n_press,double x,double y,gpo
 	    gtk_box_append(GTK_BOX(info_->box_item),label_ll);
 		
 		comp_l(info_->info_base,msg);
+	    make_window(info_);
 		
 		
 		}
