@@ -85,7 +85,7 @@ static void onSettingText(GtkDropDown *dropdown,GParamSpec *spec,gpointer ptr){
         snprintf(ultimate_path,sizeof(ultimate_path),"%s",path);
 
         info_base = mbr_h(ultimate_path); //INICIALIZACION DE info_base 
-        
+        c_back->info_base = info_base;
 			
         
        
@@ -138,7 +138,7 @@ static void onSettingText(GtkDropDown *dropdown,GParamSpec *spec,gpointer ptr){
 		 
 		 GtkGesture *click = gtk_gesture_click_new();
 		 
-		 g_signal_connect(click,"pressed",G_CALLBACK(onGesture),info_base);
+		 g_signal_connect(click,"pressed",G_CALLBACK(onGesture),c_back);
 			 
 		 if(s > 0){
 			 gtk_widget_add_controller(label_f,GTK_EVENT_CONTROLLER(click));
@@ -148,7 +148,7 @@ static void onSettingText(GtkDropDown *dropdown,GParamSpec *spec,gpointer ptr){
 		 }
      if(info_base->copia_texto_label !=NULL){
 		 printf("%s\n",info_base->copia_texto_label);
-		 //comp_l(info_base);
+		
            }
         
         

@@ -4,8 +4,12 @@
 #include<inttypes.h>
 #include<string.h>
 #include "showing_data.h"
+
 #ifndef UTILIDADES_H
 #define  UTILIDADES_H
+static void limpiar_box(GtkWidget *box);
+
+
 
 void comp_l(Info_base* i,const char *l_){
 	provisional(i,l_);
@@ -16,18 +20,23 @@ static void onGesture(GtkGestureClick *gesture,int n_press,double x,double y,gpo
 	
 	GtkWidget *label = gtk_event_controller_get_widget(GTK_EVENT_CONTROLLER(gesture));
 	const char *msg = gtk_label_get_text(GTK_LABEL(label)); 
-	Info_base *info_ = (Info_base*)pointer;
+	CallBack *info_ = (CallBack*)pointer;
     	
 	
 	if(msg !=NULL && strlen(msg) > 0){
-		g_free(info_->copia_texto_label);
-		info_->copia_texto_label = g_strdup(msg);
+		g_free(info_->info_base->copia_texto_label);
+		info_->info_base->copia_texto_label = g_strdup(msg);
 		
-		comp_l(info_,msg);
+	    limpiar_box(info_->box_item);
+		
+	    GtkWidget *label_ll = gtk_label_new(info_->info_base->copia_texto_label);
+	    gtk_box_append(GTK_BOX(info_->box_item),label_ll);
+		
+		comp_l(info_->info_base,msg);
 		
 		
 		}
-		
+    else{g_free(info_);}		
 	
 	}
 
