@@ -53,7 +53,11 @@ static void onSettingText(GtkDropDown *dropdown,GParamSpec *spec,gpointer ptr){
     CallBack *c_back = (CallBack*)ptr;
     GtkWidget *label = c_back->box;
     GtkWidget *bx_buffer = c_back->box_buffer;
+    GtkWidget *box_item = c_back->box_item;
+   
+    limpiar_box(box_item);
     GtkWidget *spinner = c_back->spinner;
+    
 
     guint selected = gtk_drop_down_get_selected(dropdown);
     if(selected == 0 || selected == GTK_INVALID_LIST_POSITION) return;
@@ -80,7 +84,11 @@ static void onSettingText(GtkDropDown *dropdown,GParamSpec *spec,gpointer ptr){
         path[x] = '\0';
         snprintf(ultimate_path,sizeof(ultimate_path),"%s",path);
 
-        info_base = mbr_h(ultimate_path);
+        info_base = mbr_h(ultimate_path); //INICIALIZACION DE info_base 
+        
+			
+        
+       
         if (info_base == NULL) {
             g_printerr("Error: No se pudo obtener la info del MBR\n");
             return;
@@ -89,6 +97,7 @@ static void onSettingText(GtkDropDown *dropdown,GParamSpec *spec,gpointer ptr){
         snprintf(info_base->full_path,sizeof(info_base->full_path),"%s",ultimate_path);
 
         lba_p = info_base->lba_partition;
+        
         if(info_base->lba_partition > 0) state_sp = true;
 
         char **m = mensaje();
@@ -226,12 +235,18 @@ static void activate(GtkApplication *app, gpointer user_data){
     gtk_widget_add_css_class(label_folder,"label_folder_");
     gtk_box_append(GTK_BOX(box_folder),label_folder);
      
+    /* ==== ENTRANCE TO FOLDER ITEMS ===*/
+    
+    GtkWidget *box_folder_item = gtk_box_new(GTK_ORIENTATION_VERTICAL,10);
+    gtk_widget_add_css_class(box_folder_item,"box_folder_item_");
+     
     
     
     
     gtk_box_append(GTK_BOX(content_box),box_info);
     gtk_box_append(GTK_BOX(content_box),box_folder);
-
+    gtk_box_append(GTK_BOX(content_box),box_folder_item); 
+      
     gtk_scrolled_window_set_child(GTK_SCROLLED_WINDOW(scroll_view),content_box);
     gtk_box_append(GTK_BOX(main_box), scroll_view);
 
@@ -263,7 +278,7 @@ static void activate(GtkApplication *app, gpointer user_data){
     "window { background-image: linear-gradient(to bottom, #050505, #0b0f14); }"
     ".main-container { border:1px solid #00ff88; border-radius:8px; box-shadow:0 0 25px rgba(0,255,136,0.15); }"
     ".neon-text { color:#00ff88; font-size:16px; font-weight:bold; }"
-    ".box_info_, .box_folder_ { background:rgba(0,20,15,0.6); border:1px solid rgba(0,255,136,0.2); border-radius:6px; padding:10px; }"
+    ".box_info_, .box_folder_ ,.box_folder_item_{ background:rgba(0,20,15,0.6); border:1px solid rgba(0,255,136,0.2); border-radius:6px; padding:10px; }"
     ".label_mbr_, .label_folder_ { color:#00ffaa; font-weight:bold; }"
     ".texto_config { color:#00ff88; font-size:13px; }"
     ".label_f_:hover { background:#00ff88; color:#000; }"  
@@ -282,6 +297,7 @@ static void activate(GtkApplication *app, gpointer user_data){
     CallBack *callback = g_malloc(sizeof(CallBack));
     callback->box = box_info;
     callback->box_buffer = box_folder;
+    callback->box_item = box_folder_item;
     callback->spinner = spinner;
 
     g_signal_connect(device_dropdown,"notify::selected",G_CALLBACK(onSettingText),callback);

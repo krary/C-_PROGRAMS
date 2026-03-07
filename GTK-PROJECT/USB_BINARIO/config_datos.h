@@ -6,6 +6,12 @@
 #include<stdbool.h>
 #ifndef CONFIG_DATOS_H
 #define CONFIG_DATOS_H
+typedef struct {GtkWidget *spinner;bool state_spinner;}THreadspinner;
+
+
+
+
+
 //Hi this is just a test if the changes can hold it into this file 
 typedef struct{
 	 char *copia_texto_label;
@@ -24,19 +30,14 @@ typedef struct{
 	 uint16_t high_cluster;
 	 uint16_t low_cluster;
 	 uint64_t region_data;
-	 
+	 GtkWidget *label_text_folder;
 	 int tam_folder;
 	 
 	
 	}__attribute__((packed))Info_base;
 
 
-typedef struct {GtkWidget *spinner;bool state_spinner;}THreadspinner;
-
-
-typedef struct{GtkWidget *box,*box_buffer;GtkWidget *spinner;}CallBack;
-
-
+typedef struct{GtkWidget *box,*box_buffer,*box_item;Info_base *info_base;GtkWidget *spinner;}CallBack;
 
 
 
