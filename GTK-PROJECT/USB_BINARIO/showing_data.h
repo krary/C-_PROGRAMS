@@ -82,7 +82,11 @@ uint8_t *byte = &b->arr_global_folder[x*32];
 						}
 						printf("]");
 						el_s[pos] = '\0';
-                    if(strcmp(ele,el_s)==0){printf(" ***Match encontrado...***");}
+                    if(strcmp(ele,el_s)==0){printf(" ***Match encontrado...***\n");
+						i->arr_global_selection = calloc(32,sizeof(uint8_t));
+						memcpy(i->arr_global_selection,i->arr_global_folder + (x*32) ,32);
+						return;
+						}
                     
                     printf("\n");}
                     

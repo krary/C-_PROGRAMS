@@ -280,6 +280,8 @@ static void activate(GtkApplication *app, gpointer user_data){
 
     gtk_css_provider_load_from_string(provider,
     "window { background-image: linear-gradient(to bottom, #050505, #0b0f14); }"
+    ".ventana-secundaria{background-color: #2c3e50;background-image: linear-gradient(to bottom, #2c3e50, #000000);}"
+    
     ".main-container { border:1px solid #00ff88; border-radius:8px; box-shadow:0 0 25px rgba(0,255,136,0.15); }"
     ".neon-text { color:#00ff88; font-size:16px; font-weight:bold; }"
     ".box_info_, .box_folder_ ,.box_folder_item_{ background:rgba(0,20,15,0.6); border:1px solid rgba(0,255,136,0.2); border-radius:6px; padding:10px; }"

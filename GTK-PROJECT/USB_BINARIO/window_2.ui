@@ -4,6 +4,10 @@
   <!-- interface-name window_2.ui -->
   <requires lib="gtk" version="4.14"/>
   <object class="GtkWindow" id="window_2">
+    <property name="css-classes">ventana-secundaria
+</property>
+    <property name="default-height">300</property>
+    <property name="default-width">901</property>
     <property name="title">reading_folder</property>
     <child>
       <object class="GtkBox" id="main_box">

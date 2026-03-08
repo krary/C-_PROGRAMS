@@ -20,6 +20,7 @@ typedef struct{
 	 char full_path[512]; //lleno
 	 uint8_t arr_global[512]; //lleno
 	 uint8_t *arr_global_folder;
+	 uint8_t *arr_global_selection;
 	 uint64_t lba_partition; //lleno
 	 uint64_t cluster_num; //lleno
 	 uint8_t fat_num;  //lleno
@@ -38,7 +39,7 @@ typedef struct{
 
 
 typedef struct{
-	GtkWidget *box,*box_buffer,*box_item,*window_2;
+	GtkWidget *box,*box_buffer,*box_item,*window_2;GtkBox *box_window2;
 	Info_base *info_base;GtkBuilder *builder;GtkWidget *spinner;GtkApplication *app;
 	}CallBack;
 

@@ -15,8 +15,25 @@ void make_window(CallBack *c_){
 		gtk_window_destroy(GTK_WINDOW(c_->window_2));
 		c_->window_2 = NULL;}
 	
+	
+	
+	
 	c_->builder = gtk_builder_new_from_file("window_2.ui");
 	c_->window_2 = GTK_WIDGET(gtk_builder_get_object(c_->builder,"window_2"));
+	c_->box_window2 = GTK_BOX(gtk_builder_get_object(c_->builder,"main_box"));
+	
+	if(c_->info_base->arr_global_selection[0] != 0){
+		
+		for(int j = 0; j<32;j++ ){
+			printf("%02X ",c_->info_base->arr_global_selection[j]);
+			}
+			printf("\n");
+		
+		}
+	
+	
+	GtkWidget *ll_  = gtk_label_new("hELLO wORLD..!");
+	gtk_box_append(GTK_BOX(c_->box_window2),ll_);
 	
 	
 	gtk_window_set_application(GTK_WINDOW(c_->window_2),c_->app);
