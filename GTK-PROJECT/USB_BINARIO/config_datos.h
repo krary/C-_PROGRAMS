@@ -31,7 +31,7 @@ typedef struct{
 	 uint16_t high_cluster;
 	 uint16_t low_cluster;
 	 uint64_t region_data;
-	 GtkWidget *label_text_folder;
+	 GtkWidget *label_text_folder;  //lleno
 	 int tam_folder;
 	 
 	

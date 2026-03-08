@@ -9,8 +9,16 @@
 #define  UTILIDADES_H
 static void limpiar_box(GtkWidget *box);
 
+bool file_folder(uint8_t *ptr){
+
+	return (ptr[11] &0x10)?true:false;
+	}
+
+
+
+
 void make_window(CallBack *c_){
-	
+	char *path;
 	if(c_->window_2 != NULL &&GTK_IS_WINDOW(c_->window_2)){	
 		gtk_window_destroy(GTK_WINDOW(c_->window_2));
 		c_->window_2 = NULL;}
@@ -24,16 +32,24 @@ void make_window(CallBack *c_){
 	
 	if(c_->info_base->arr_global_selection[0] != 0){
 		
-		for(int j = 0; j<32;j++ ){
+		/*for(int j = 0; j<32;j++ ){
 			printf("%02X ",c_->info_base->arr_global_selection[j]);
-			}
-			printf("\n");
-		
+			}*/
+			bool clave = file_folder(c_->info_base->arr_global_selection);
+			if(clave){ printf("HAS SELECCIONADO UNA CARPETA\n");   path = "folder_img.ico";}
+		    if(!clave) {printf("HAS SELECCIONADO UN ARCHIVO\n");   path = "file_img.ico";}
 		}
 	
-	
+	GtkWidget *bx_tmp = gtk_box_new(GTK_ORIENTATION_HORIZONTAL,5);
 	GtkWidget *ll_  = gtk_label_new("hELLO wORLD..!");
-	gtk_box_append(GTK_BOX(c_->box_window2),ll_);
+	GtkWidget *icono_ = gtk_image_new_from_file(path);
+	GtkWidget *button = gtk_button_new();
+	
+	gtk_box_append(GTK_BOX(bx_tmp),icono_);
+	gtk_box_append(GTK_BOX(bx_tmp),ll_);
+	
+	gtk_button_set_child(GTK_BUTTON(button),bx_tmp);
+	gtk_box_append(GTK_BOX(c_->box_window2),button);
 	
 	
 	gtk_window_set_application(GTK_WINDOW(c_->window_2),c_->app);
