@@ -3,6 +3,7 @@
 #include<gtk/gtk.h> 
 #include<inttypes.h>
 #include<string.h>
+#include<stdint.h>
 #include "showing_data.h"
 
 #ifndef UTILIDADES_H
@@ -40,10 +41,18 @@ void make_window(CallBack *c_){
 		    if(!clave) {printf("HAS SELECCIONADO UN ARCHIVO\n");   path = "file_img.ico";}
 		}
 	
+	//PUEDES QUITAR EL CODIGO SIGUIENTE PARA CONFIGURAR EL MSG
+	//c_->info_base->region_data = 232;
+	char msg_[32];
+	snprintf(msg_,sizeof(msg_)," REGION DATA : %lu",c_->info_base->region_data);
+	
+	
 	GtkWidget *bx_tmp = gtk_box_new(GTK_ORIENTATION_HORIZONTAL,5);
-	GtkWidget *ll_  = gtk_label_new("hELLO wORLD..!");
+	GtkWidget *ll_  = gtk_label_new(msg_);
 	GtkWidget *icono_ = gtk_image_new_from_file(path);
 	GtkWidget *button = gtk_button_new();
+	gtk_widget_add_css_class(button,"button_");
+	
 	
 	gtk_box_append(GTK_BOX(bx_tmp),icono_);
 	gtk_box_append(GTK_BOX(bx_tmp),ll_);
