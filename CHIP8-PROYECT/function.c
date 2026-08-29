@@ -1,5 +1,5 @@
 #include "library.h"
-
+//THIS IS JUST A COMMENT
 
 void init_chip(Chip8 *ch){
 	*ch = (Chip8){0};
