@@ -3,7 +3,9 @@
 
 void init_chip(Chip8 *ch){
 	*ch = (Chip8){0};
-	 ch->pc = 0x200;}
+	 ch->pc = 0x200;
+
+     memcpy(&ch->ram[FONT_SET_START_ADDRESS],chip8_fontset,sizeof(chip8_fontset));}
 
 void init_load_rom(Chip8 *ch,const char *filename){
 	FILE *f = fopen(filename,"rb");
@@ -35,6 +37,42 @@ uint8_t kk = (opcode & 0x00ff);
 uint16_t nnn = (opcode & 0x0fff);
 
 switch(opcode &0xf000){
+    case 0xF000:{
+    	switch(kk){
+    		case 0x07:
+    			ch->V[x]=ch->delay_timer;
+    			break;
+    		case 0x15:
+    			ch->delay_timer = ch->V[x];
+    			break;
+    		case 0x18:
+    			ch->delay_sound = ch->V[x];
+    			break;
+    		case 0x1E:
+    			ch->I +=ch->V[x];
+    			break;
+    		case 0x29:
+    			ch->I = FONT_SET_START_ADDRESS + (ch->V[x] * 5);
+    			break;
+    		case 0x33:
+    			ch->ram[ch->I] = ch->V[x] / 100;
+    			ch->ram[ch->I + 1] = (ch->V[x] / 10) %10;
+    			ch->ram[ch->I +2] = ch->V[x] % 10;
+    			break;
+    		case 0x55:
+    			for(int i = 0; i<= x; i++){
+    				ch->ram[ch->I +i] = ch->V[i];}
+    			break;
+    		case 0x65:
+    			for(int i = 0; i<= x; i++){
+    				ch->V[i] = ch->ram[ch->I + i];}
+    			break;
+    		default:
+    			printf("[0x%04X] UKNOWN INSTRUCTION\n",opcode);
+    		
+    	}
+    	break;
+    }
     case 0xD000:{
     	uint8_t x_pos = ch->V[x] % 64;
     	uint8_t y_pos = ch->V[y] % 32;
@@ -42,7 +80,9 @@ switch(opcode &0xf000){
     	for(uint8_t row = 0; row < n; row++){
     		uint8_t sprite_byte = ch->ram[ch->I + row];
     		for(uint8_t col = 0; col < 8;col++){
+    		
     			uint8_t sprite_pixel = sprite_byte &(0x80 >> col);
+
     			if(sprite_pixel != 0){
     				uint16_t screen_x = (x_pos + col) % 64;
     				uint16_t screen_y = (y_pos + row) % 32;
