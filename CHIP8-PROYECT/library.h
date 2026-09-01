@@ -12,7 +12,15 @@
 #define SCREEN_HIGH 32
 #define SCALE 10
 
- #define FONT_SET_START_ADDRESS 0X50
+#define FONT_SET_START_ADDRESS 0X50
+
+typedef struct{
+	SDL_Window* window;
+	SDL_Renderer* render;
+	SDL_Texture *texture;
+	SDL_Rect rect;
+}Window;
+
 typedef struct{
 	uint8_t ram[4096];
 //CARGA DE MEMORIA DE TODO EL BITCODE DE EL ARCHIVO A PARTIR DE 0X200
@@ -34,7 +42,9 @@ typedef struct{
 
 extern uint8_t chip8_fontset[80];
 void init_chip(Chip8 *);
-
+void init_window(Window*);
+void init_draw(Window*);
+void init_event(Window*);
 
 
 #endif

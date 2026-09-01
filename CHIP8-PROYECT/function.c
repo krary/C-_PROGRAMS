@@ -136,7 +136,7 @@ memset(ch->display,0,sizeof(ch->display));}
         		ch->V[0xF] = (ch->V[x]>= ch->V[y])?1:0;
         		ch->V[x] -= ch->V[y];
         		break;}
-        }
+         }
      break;
      case 0xA000:
         ch->I = nnn;

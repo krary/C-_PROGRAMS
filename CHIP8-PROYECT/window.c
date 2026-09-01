@@ -18,11 +18,35 @@ uint8_t chip8_fontset[80] = {
     0xF0, 0x80, 0xF0, 0x80, 0xF0, // E
     0xF0, 0x80, 0xF0, 0x80, 0x80  // F
 };
+void init_event(Window *w){
+	init_window(w);
+	int run = 1;
 
-void start_window(SDL_Window* w,SDL_Renderer *r){
-w = SDL_CreateWindow("CHIP8 Emulator",
+	SDL_Event event;
+	while(run){
+		while(SDL_PollEvent(&event)){
+			if(event.type == SDL_QUIT)run = 0;
+			if(event.type == SDL_KEYDOWN){
+				switch(event.key.keysym.sym){
+					case SDLK_q:
+						run = 0;}}
+
+		}
+    init_draw(w);
+	}
+}
+void init_window(Window *w){
+w->window = SDL_CreateWindow("CHIP8 Emulator",
 		SDL_WINDOWPOS_CENTERED,SDL_WINDOWPOS_CENTERED,
 		SCREEN_WIDTH*SCALE,SCREEN_HIGH*SCALE,SDL_WINDOW_SHOWN);
-r = SDL_CreateRenderer(w,-1,SDL_RENDERER_ACCELERATED);	
+w->render = SDL_CreateRenderer(w->window,-1,SDL_RENDERER_ACCELERATED);}
 
-}
+
+void init_draw(Window *w){
+	SDL_SetRenderDrawColor(w->render,0,0,0,255);
+    SDL_RenderClear(w->render);
+    //AQUI SE DIBUJA
+
+
+    SDL_RenderPresent(w->render);}
+    
