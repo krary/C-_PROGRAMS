@@ -115,6 +115,10 @@ memset(ch->display,0,sizeof(ch->display));}
      case 0x4000:
         if(ch->V[x] != kk){ch->pc+=2;}
         break;
+     case 0x5000: // 5XY0: SE Vx, Vy (Salto si Vx == Vy)
+         if (ch->V[x] == ch->V[y]) {
+             ch->pc += 2;}
+         break;
      case 0x6000: //CREAR UN VALOR EN EL REGISTRO V[X]: kk
         ch->V[x]=kk;
         break;
@@ -122,22 +126,47 @@ memset(ch->display,0,sizeof(ch->display));}
         ch->V[x] += kk;
         break;
      case 0x8000:
-        switch(n){
-        	case 0x0:ch->V[x] = ch->V[y];break;
-        	case 0x1:ch->V[x] |= ch->V[y];break; //EXPRESION OR UN UNO CUANDO HAY UN UNO
-        	case 0x2:ch->V[x] &= ch->V[y];break; //EXPRESION MASCARA UN UNO CUANDO AMBOS SON UNO
-        	case 0x3:ch->V[x] ^= ch->V[y];break; //EXPRESION XOR UN UNO CUANDO AMBOS SON DIFERENTES
-        	case 0x4:{
-        		uint16_t sum = ch->V[x] + ch->V[y];
-        		ch->V[0XF] = (sum>255)?1:0;
-        		ch->V[x] = sum & 0xFF;
-        		break;}
-        	case 0x5:{
-        		ch->V[0xF] = (ch->V[x]>= ch->V[y])?1:0;
-        		ch->V[x] -= ch->V[y];
-        		break;}
+         switch(n) {
+             case 0x0: ch->V[x] = ch->V[y]; break;
+             case 0x1: ch->V[x] |= ch->V[y]; break;
+             case 0x2: ch->V[x] &= ch->V[y]; break;
+             case 0x3: ch->V[x] ^= ch->V[y]; break;
+             case 0x4: {
+                 uint16_t sum = ch->V[x] + ch->V[y];
+                 ch->V[0xF] = (sum > 255) ? 1 : 0;
+                 ch->V[x] = sum & 0xFF;
+                 break;
+             }
+             case 0x5: {
+                 ch->V[0xF] = (ch->V[x] >= ch->V[y]) ? 1 : 0;
+                 ch->V[x] -= ch->V[y];
+                 break;
+             }
+             case 0x6: {
+                 ch->V[0xF] = ch->V[x] & 0x1;
+                 ch->V[x] >>= 1;
+                 break;
+             }
+             case 0x7: { // Opcional: Si tu ROM usa este sub-opcode (Vy - Vx)
+                 ch->V[0xF] = (ch->V[y] >= ch->V[x]) ? 1 : 0;
+                 ch->V[x] = ch->V[y] - ch->V[x];
+                 break;
+             }
+             case 0xE: {
+                 ch->V[0xF] = (ch->V[x] & 0x80) >> 7;
+                 ch->V[x] <<= 1;
+                 break;
+             }
+             default:
+                 printf("[0x%04X] UNKNOWN 0x8000 INSTRUCTION\n", opcode);
+                 break;
          }
-     break;
+         break;
+     case 0x9000: // 9XY0: Salta si V[x] != V[y]
+         if (n == 0x0) {
+             if (ch->V[x] != ch->V[y]) {
+                 ch->pc += 2;}}
+         break;
      case 0xA000:
         ch->I = nnn;
         break;

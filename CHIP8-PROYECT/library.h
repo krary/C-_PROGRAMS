@@ -44,7 +44,9 @@ extern uint8_t chip8_fontset[80];
 void init_chip(Chip8 *);
 void init_window(Window*);
 void init_draw(Window*);
-void init_event(Window*);
+void init_event(Window*,Chip8*);
+void init_load_rom(Chip8*,const char *);
+void init_chip8_cycle(Chip8 *);
 
 
 #endif

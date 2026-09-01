@@ -13,11 +13,14 @@ int main(int argc,char **argv){
   init_chip(&chip);
 
   
+  init_load_rom(&chip,"IBM_logo.ch8");
+ 
+  
   Window *window =  calloc(1,sizeof(Window));
   if(!window){printf("Cannot reserved enough memory for the struct..\n");return 1;}
 
 
-init_event(window);
+init_event(window,&chip);
 
  if(window->window != NULL)SDL_DestroyWindow(window->window);
  if(window->render != NULL)SDL_DestroyRenderer(window->render);
