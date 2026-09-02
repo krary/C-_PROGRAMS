@@ -47,7 +47,9 @@ void making_sprites(){
         
         rom_[6]	=0xD0; //INSTRUCCION DXYN 
         rom_[7]	=0x18;
+
         
+  //************************************************************************      
    	    rom_[256] = 0xFF;
    	    rom_[257] = 0x81;
    	    rom_[258] = 0x81;
@@ -56,6 +58,7 @@ void making_sprites(){
    	    rom_[261] = 0x81;
    	    rom_[262] = 0x81;
    	    rom_[263] = 0xFF;
+  //************************************************************************
   FILE *f = fopen("square.ch8","wb");
   if(!f){
   	printf("The file couldnt create ..\n");
@@ -64,3 +67,12 @@ void making_sprites(){
    printf("The file was created succesfully...\n");
 
    if(f != NULL)fclose(f);}
+
+
+
+void bit_bit(size_t tam,uint8_t *arr){
+	uint8_t elementos[tam* 8];
+	for(int x = 0; x < (int)tam*8;x++) {
+		
+	}
+}
