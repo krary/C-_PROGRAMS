@@ -28,9 +28,10 @@ void draw_terminal(Chip8 *ch){
 			if(ch->display[y*64 + x]){
 				printf("██");}
 			else{
-				printf(" ");
+				printf("  ");
 			}
 		}
+		printf("\n");
 	}
 }
 void making_sprites(){
