@@ -92,6 +92,7 @@ switch(opcode &0xf000){
     			}
     		}
     	}
+    	draw_terminal(ch);
     	break;
     }
 	case 0x0000:

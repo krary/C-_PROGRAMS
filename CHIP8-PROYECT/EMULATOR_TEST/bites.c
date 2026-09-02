@@ -18,18 +18,48 @@ uint8_t chip8_fontset[80] = {
     0xF0, 0x80, 0xF0, 0x80, 0xF0, // E
     0xF0, 0x80, 0xF0, 0x80, 0x80  // F
 };
-uint8_t rom[264]={
+uint8_t rom_[264]={0};
 
-	0x60,
-	0x0A,  //INSTRUCCION LD V0
 
-	0x61,
-	0x05,  //INSTRUCCION LD V1
 
-	0xA3,
-	0x00   //INSTRUCCION LD I 
-	
-};	
-void making_sprites(){
-	
+void draw_terminal(Chip8 *ch){
+	for(int y = 0; y < 32;y++){
+		for(int x = 0; x < 64; x++ ){
+			if(ch->display[y*64 + x]){
+				printf("██");}
+			else{
+				printf(" ");
+			}
+		}
+	}
 }
+void making_sprites(){
+   // Sprite comienza en rom[256] 8 BYTES
+        rom_[0]=0x60;
+        rom_[1]=0x0A;  //INSTRUCCION LD V0
+        
+        rom_[2]	=0x61;
+        rom_[3]	=0x05;  //INSTRUCCION LD V1
+        
+        rom_[4]	=0xA3;
+        rom_[5]	=0x00; //INSTRUCCION LD I [INDICE DONDE SE ENCUETRAN LOS BYTES QUE VAMOS A DIBUJAR]
+        
+        rom_[6]	=0xD0; //INSTRUCCION DXYN 
+        rom_[7]	=0x18;
+        
+   	    rom_[256] = 0xFF;
+   	    rom_[257] = 0x81;
+   	    rom_[258] = 0x81;
+   	    rom_[259] = 0x81;
+   	    rom_[260] = 0x81;
+   	    rom_[261] = 0x81;
+   	    rom_[262] = 0x81;
+   	    rom_[263] = 0xFF;
+  FILE *f = fopen("square.ch8","wb");
+  if(!f){
+  	printf("The file couldnt create ..\n");
+  	return;}
+   fwrite(rom_,1,sizeof(rom_),f);
+   printf("The file was created succesfully...\n");
+
+   if(f != NULL)fclose(f);}
