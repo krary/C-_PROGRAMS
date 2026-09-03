@@ -77,18 +77,18 @@ switch(opcode &0xf000){
     	uint8_t x_pos = ch->V[x] % 64;
     	uint8_t y_pos = ch->V[y] % 32;
     	ch->V[0xF]=0;
-    	for(uint8_t row = 0; row < n; row++){
-    		uint8_t sprite_byte = ch->ram[ch->I + row];
-    		for(uint8_t col = 0; col < 8;col++){
+   for(uint8_t row = 0; row < n; row++){
+ uint8_t sprite_byte = ch->ram[ch->I + row];
+   for(uint8_t col = 0; col < 8;col++){
     		
-    			uint8_t sprite_pixel = sprite_byte &(0x80 >> col);
+ uint8_t sprite_pixel = sprite_byte &(0x80 >> col);
 
-    			if(sprite_pixel != 0){
-    				uint16_t screen_x = (x_pos + col) % 64;
-    				uint16_t screen_y = (y_pos + row) % 32;
-    				uint16_t index = screen_y * 64 + screen_x;
-    			    if(ch->display[index] == 1){ch->V[0XF]=1;}
-    			    ch->display[index] ^= 1;	
+ if(sprite_pixel != 0){
+ uint16_t screen_x = (x_pos + col) % 64;
+ uint16_t screen_y = (y_pos + row) % 32;
+ uint16_t index = screen_y * 64 + screen_x;
+ if(ch->display[index] == 1){ch->V[0XF]=1;}
+ ch->display[index] ^= 1;	
     			}
     		}
     	}

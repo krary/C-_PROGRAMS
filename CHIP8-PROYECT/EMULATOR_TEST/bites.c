@@ -23,8 +23,10 @@ uint8_t rom_[264]={0};
 
 
 void draw_terminal(Chip8 *ch){
-	for(int y = 0; y < 32;y++){
-		for(int x = 0; x < 64; x++ ){
+    int x = 0;
+    int y = 0;
+	for( y = 0; y < 32;y++){
+		for(x = 0; x < 64; x++ ){
 			if(ch->display[y*64 + x]){
 				printf("██");}
 			else{
@@ -37,7 +39,7 @@ void draw_terminal(Chip8 *ch){
 void making_sprites(){
    // Sprite comienza en rom[256] 8 BYTES
         rom_[0]=0x60;
-        rom_[1]=0x0A;  //INSTRUCCION LD V0
+        rom_[1]=0x03;  //INSTRUCCION LD V0
         
         rom_[2]	=0x61;
         rom_[3]	=0x05;  //INSTRUCCION LD V1
@@ -46,18 +48,16 @@ void making_sprites(){
         rom_[5]	=0x00; //INSTRUCCION LD I [INDICE DONDE SE ENCUETRAN LOS BYTES QUE VAMOS A DIBUJAR]
         
         rom_[6]	=0xD0; //INSTRUCCION DXYN 
-        rom_[7]	=0x18;
+        rom_[7]	=0x15;
 
         
   //************************************************************************      
    	    rom_[256] = 0xFF;
-   	    rom_[257] = 0x81;
-   	    rom_[258] = 0x81;
-   	    rom_[259] = 0x81;
-   	    rom_[260] = 0x81;
-   	    rom_[261] = 0x81;
-   	    rom_[262] = 0x81;
-   	    rom_[263] = 0xFF;
+   	    rom_[257] = 0x80;
+   	    rom_[258] = 0x80;
+   	    rom_[259] = 0x80;
+   	    
+   	    rom_[260] = 0xFF;
   //************************************************************************
   FILE *f = fopen("square.ch8","wb");
   if(!f){
