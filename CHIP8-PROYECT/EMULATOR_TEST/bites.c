@@ -48,16 +48,25 @@ void making_sprites(){
         rom_[5]	=0x00; //INSTRUCCION LD I [INDICE DONDE SE ENCUETRAN LOS BYTES QUE VAMOS A DIBUJAR]
         
         rom_[6]	=0xD0; //INSTRUCCION DXYN 
-        rom_[7]	=0x15;
 
+        rom_[7]	=0x11;
+
+        //************************************************
+
+
+        rom_[8] = 0x70;
+        rom_[9] = 0x08;
+
+        rom_[10] = 0xD0; //INSTRUCCION DXYN 
+        rom_[11] = 0x11;
         
   //************************************************************************      
    	    rom_[256] = 0xFF;
-   	    rom_[257] = 0x80;
-   	    rom_[258] = 0x80;
-   	    rom_[259] = 0x80;
    	    
-   	    rom_[260] = 0xFF;
+   	    
+   	    
+
+   	    
   //************************************************************************
   FILE *f = fopen("square.ch8","wb");
   if(!f){
