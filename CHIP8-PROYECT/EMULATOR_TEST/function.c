@@ -37,6 +37,19 @@ uint8_t kk = (opcode & 0x00ff);
 uint16_t nnn = (opcode & 0x0fff);
 
 switch(opcode &0xf000){
+ //===============================================================
+ //==========INSTRUCTION OF THE KEYBOARD==========================
+    case 0xE000:
+        switch(kk){
+        	case 0x9E:
+        		if(ch->keypad[ch->V[x]] != 0){ch->pc += 2;}break;
+        	case 0xA1:
+        		if(ch->keypad[ch->V[x]] == 0){ch->pc += 2;}break;
+        	default:
+        		printf("[0x%04X]UKNOWN INSTRUCTION..\n",opcode);break;
+        }
+       break;
+ //===============================================================
     case 0xF000:{
     	switch(kk){
     		case 0x07:

@@ -132,6 +132,54 @@ void making_sprites(){
 
        rom_[54] = 0xD0;
        rom_[55] = 0x11;
+//============READING KEYBOARD============================
+       //TECLA IZQUIERDA
+       rom_[56] = 0x62; 
+       rom_[57] = 0x04;
+
+       rom_[58] = 0xE2;
+       rom_[59] = 0xA1;
+
+       rom_[60] = 0x70;
+       rom_[61] = 0xFF;
+
+      //TECLA DERECHA
+       rom_[62] = 0x62;
+       rom_[63] = 0x06;
+      
+       rom_[64] = 0xE2;
+       rom_[65] = 0xA1;
+
+       rom_[66] = 0x70;
+       rom_[67] = 0x01;
+
+      //TECLA ARRIBA
+       rom_[68] = 0x62;
+       rom_[69] = 0x02;
+      
+       rom_[70] = 0xE2;
+       rom_[71] = 0xA1;
+      
+       rom_[72] = 0x71;
+       rom_[73] = 0xFF;
+      
+      //TECLA ABAJO
+       rom_[74] = 0x62;
+       rom_[75] = 0x08;
+      
+       rom_[76] = 0xE2;
+       rom_[77] = 0xA1;
+      
+       rom_[78] = 0x71;
+       rom_[79] = 0x01;
+ //*********************************************************************************
+ //==========REDIBUJANDO AL PERSONAJE==============================================
+      rom_[80] = 0xD0;
+      rom_[81] = 0x14;
+
+      
+      
+         
        
 
 
