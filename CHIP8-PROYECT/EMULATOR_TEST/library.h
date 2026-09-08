@@ -5,6 +5,7 @@
 #include<string.h>
 #include<stdbool.h>
 #include<stdint.h>
+#include<termios.h>
 #ifndef LIBRARY_H
 #define LIBRARY_H
 #define SCREEN_WIDTH 64
@@ -33,13 +34,23 @@ typedef struct{
 	uint8_t display[64 * 32];
 	uint8_t keypad[16];
 }Chip8;
-
+typedef struct{
+	void(*get_old_config)(struct termios *);
+	void(*get_new_config)(struct termios *,struct termios *);
+	void(*take_back)(struct termios *);
+}Stdin_fileno;
 extern uint8_t chip8_fontset[80];
 void init_chip(Chip8 *);
 void init_load_rom(Chip8*,const char *);
 void init_chip8_cycle(Chip8 *);
 void making_sprites();
 void draw_terminal(Chip8*);
+void get_old_config(struct termios*);
+void get_new_config(struct termios*,struct termios*);
+void take_back(struct termios *);
+void writing_keypad(Chip8 *);
+bool get_fd_set_config();
+int getting_char(char);
 
 
 #endif

@@ -120,64 +120,42 @@ void making_sprites(){
 //==========================================
 //******************************************
 
-//=============DIBUJANDO EL PERSONAJE====================
-       rom_[48] = 0xA3;
-       rom_[49] = 0x54;
+// ================= DIBUJO INICIAL DEL PERSONAJE =================
+rom_[48] = 0xA3; rom_[49] = 0x54; // LD I, 0x0354 (Sprite del personaje)
+rom_[50] = 0x60; rom_[51] = 0x0A; // LD V0, 10 (X inicial)
+rom_[52] = 0x61; rom_[53] = 0x0A; // LD V1, 10 (Y inicial)
+rom_[54] = 0xD0; rom_[55] = 0x14; // DRW V0, V1, 4 (Dibuja personaje inicial)
 
-       rom_[50] = 0x61;
-       rom_[51] = 0x0A;
+// ================= BUCLE PRINCIPAL (Dirección 0x0238 / Byte 56) =================
+// 1. Cargar el puntero I y BORRAR el personaje en la posición actual (XOR)
+rom_[56] = 0xA3; rom_[57] = 0x54; // LD I, 0x0354
+rom_[58] = 0xD0; rom_[59] = 0x14; // DRW V0, V1, 4 (Borra sprite anterior)
 
-       rom_[52] = 0x60;
-       rom_[53] = 0x0A;
+// 2. TECLA IZQUIERDA (Tecla 4)
+rom_[60] = 0x62; rom_[61] = 0x04; // LD V2, 4
+rom_[62] = 0xE2; rom_[63] = 0xA1; // SKNP V2 (Si NO se pulsa 4, salta el ADD)
+rom_[64] = 0x70; rom_[65] = 0xFF; // ADD V0, -1
 
-       rom_[54] = 0xD0;
-       rom_[55] = 0x11;
-//============READING KEYBOARD============================
-       //TECLA IZQUIERDA
-       rom_[56] = 0x62; 
-       rom_[57] = 0x04;
+// 3. TECLA DERECHA (Tecla 6)
+rom_[66] = 0x62; rom_[67] = 0x06; // LD V2, 6
+rom_[68] = 0xE2; rom_[69] = 0xA1; // SKNP V2
+rom_[70] = 0x70; rom_[71] = 0x01; // ADD V0, 1
 
-       rom_[58] = 0xE2;
-       rom_[59] = 0xA1;
+// 4. TECLA ARRIBA (Tecla 2)
+rom_[72] = 0x62; rom_[73] = 0x02; // LD V2, 2
+rom_[74] = 0xE2; rom_[75] = 0xA1; // SKNP V2
+rom_[76] = 0x71; rom_[77] = 0xFF; // ADD V1, -1
 
-       rom_[60] = 0x70;
-       rom_[61] = 0xFF;
+// 5. TECLA ABAJO (Tecla 8)
+rom_[78] = 0x62; rom_[79] = 0x08; // LD V2, 8
+rom_[80] = 0xE2; rom_[81] = 0xA1; // SKNP V2
+rom_[82] = 0x71; rom_[83] = 0x01; // ADD V1, 1
 
-      //TECLA DERECHA
-       rom_[62] = 0x62;
-       rom_[63] = 0x06;
-      
-       rom_[64] = 0xE2;
-       rom_[65] = 0xA1;
+// 6. REDIBUJAR EN NUEVA POSICIÓN
+rom_[84] = 0xD0; rom_[85] = 0x14; // DRW V0, V1, 4 (Pinta sprite en nuevas X,Y)
 
-       rom_[66] = 0x70;
-       rom_[67] = 0x01;
-
-      //TECLA ARRIBA
-       rom_[68] = 0x62;
-       rom_[69] = 0x02;
-      
-       rom_[70] = 0xE2;
-       rom_[71] = 0xA1;
-      
-       rom_[72] = 0x71;
-       rom_[73] = 0xFF;
-      
-      //TECLA ABAJO
-       rom_[74] = 0x62;
-       rom_[75] = 0x08;
-      
-       rom_[76] = 0xE2;
-       rom_[77] = 0xA1;
-      
-       rom_[78] = 0x71;
-       rom_[79] = 0x01;
- //*********************************************************************************
- //==========REDIBUJANDO AL PERSONAJE==============================================
-      rom_[80] = 0xD0;
-      rom_[81] = 0x14;
-
-      
+// 7. VOLVER AL INICIO DEL BUCLE (Byte 56 = 0x0238)
+rom_[86] = 0x12; rom_[87] = 0x38; // JP 0x0238      
       
          
        
@@ -218,9 +196,39 @@ void making_sprites(){
 
 
 
-void bit_bit(size_t tam,uint8_t *arr){
-	uint8_t elementos[tam* 8];
-	for(int x = 0; x < (int)tam*8;x++) {
-		
+void get_old_config(struct termios *o){
+		tcgetattr(STDIN_FILENO,o);	}
+void get_new_config(struct termios *n ,struct termios *o){
+	    *n = *o;
+	    n->c_lflag &= ~(ICANON | ECHO);
+	    tcsetattr(STDIN_FILENO,TCSANOW,n);}
+void take_back(struct termios *o){
+        tcsetattr(STDIN_FILENO,TCSANOW,o);}
+bool get_fd_set_config(){
+	fd_set fd;
+	FD_ZERO(&fd);
+    FD_SET(STDIN_FILENO,&fd);
+	struct timeval tv = {0,0};
+	int state = select(STDIN_FILENO + 1,&fd,NULL,NULL,&tv);
+	return (state > 0);}
+
+int getting_char(char c){
+	switch(c){
+				case '1': return 0x1; case '2': return 0x2; case '3': return 0x3; case '4': return 0xC;
+				        case 'q': return 0x4; case 'w': return 0x5; case 'e': return 0x6; case 'r': return 0xD;
+				        case 'a': return 0x7; case 's': return 0x8; case 'd': return 0x9; case 'f': return 0xE;
+				        case 'z': return 0xA; case 'x': return 0x0; case 'c': return 0xB; case 'v': return 0xF;
+				        default: return -1;}}
+
+void writing_keypad(Chip8 *ch){
+	for(int x = 0; x <16;++x) {
+		ch->keypad[x] = 0;}
+
+	while((get_fd_set_config())){
+		char c = getchar();
+		int indice = getting_char(c);
+		if(indice != -1){
+			ch->keypad[indice] = 1;
+		}
 	}
 }
