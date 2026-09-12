@@ -28,11 +28,12 @@ void draw_terminal(Chip8 *ch){
 	for( y = 0; y < 32;y++){
 		for(x = 0; x < 64; x++ ){
 			if(ch->display[y*64 + x]){
+
 				//printf("██");
-				printf("*");
+			printf("**");
 				}
 			else{
-				printf(" ");
+				printf("  ");
 			}
 		}
 		printf("\n");
@@ -214,9 +215,9 @@ bool get_fd_set_config(){
 
 int getting_char(char c){
 	switch(c){
-				case '1': return 0x1; case '2': return 0x2; case '3': return 0x3; case '4': return 0xC;
-				        case 'q': return 0x4; case 'w': return 0x5; case 'e': return 0x6; case 'r': return 0xD;
-				        case 'a': return 0x7; case 's': return 0x8; case 'd': return 0x9; case 'f': return 0xE;
+				case '1': return 0x1; case 'q': return 0x2; case '3': return 0x3; case '4': return 0xC;
+				        case 'a': return 0x4; case 'w': return 0x5; case 'd': return 0x6; case 'r': return 0xD;
+				        case 'y': return 0x7; case 'j': return 0x8; case 'm': return 0x9; case 'f': return 0xE;
 				        case 'z': return 0xA; case 'x': return 0x0; case 'c': return 0xB; case 'v': return 0xF;
 				        default: return -1;}}
 
