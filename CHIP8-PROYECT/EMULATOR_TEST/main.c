@@ -23,16 +23,20 @@ Chip8 *chip = malloc(sizeof(Chip8));
 
      //get_old_config(&old);
      //get_new_config(&new,&old);
-    
+    Window *window = calloc(1,sizeof(Window));
+    window->ch = chip;
+
+  
+    init_event(window);
 
 
 //=========================================================================
-    while (chip->pc < 4096) {
+ /*   while (chip->pc < 4096) {
              //writing_keypad(chip);
              init_chip8_cycle(chip);
              
              usleep(1200); // Pequeña pausa (~800Hz) para controlar la velocidad
-         } 
+         }*/ 
 //========================================================================================
 
 
@@ -45,6 +49,10 @@ Chip8 *chip = malloc(sizeof(Chip8));
 //==========================================================================
     if(chip != NULL)free(chip);
     if(std_fileno != NULL)free(std_fileno);
+    SDL_DestroyWindow(window->w);
+    SDL_DestroyRenderer(window->r);
+    SDL_DestroyTexture(window->t);
+    if(window != NULL)free(window);
     //take_back(&old);
 //=====================================================================================
 	return 0;
