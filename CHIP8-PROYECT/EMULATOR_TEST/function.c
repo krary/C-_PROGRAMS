@@ -50,8 +50,39 @@ switch(opcode &0xf000){
         }
        break;
  //===============================================================
+
+ //===========INSTRUCCION JUMP HACIA NNN========================
+   case 0xB000: // BNNN: PC = nnn + V[0]
+       ch->pc = nnn + ch->V[0];
+       break;
+//===============================================================
+
+//=============INSTRUCCION QUE GENERA UN NUMERO ALEATORIO======================
+    case 0xC000: // CXKK: V[x] = rand() % 256 & kk
+            ch->V[x] = (rand() % 256) & kk;
+            break;
+//=============================================================================
+
+ 
     case 0xF000:{
     	switch(kk){
+    	    case 0x0A: {
+    	        int key_pressed = 0;
+    	        for (int i = 0; i < 16; i++) {
+    	            if (ch->keypad[i] != 0) {
+    	                ch->V[x] = i;
+    	                key_pressed = 1;
+    	                break;
+    	            }
+    	        }
+    	    
+    	        // Si ninguna tecla está presionada, retrocedemos el PC 
+    	        // para repetir esta misma instrucción en el siguiente ciclo
+    	        if (!key_pressed) {
+    	            ch->pc -= 2;
+    	        }
+    	        break;
+    	    }
     		case 0x07:
     			ch->V[x]=ch->delay_timer;
     			break;
@@ -105,7 +136,7 @@ switch(opcode &0xf000){
     			}
     		}
     	}
-    	draw_terminal(ch);
+    	//draw_terminal(ch);
     	break;
     }
 	case 0x0000:

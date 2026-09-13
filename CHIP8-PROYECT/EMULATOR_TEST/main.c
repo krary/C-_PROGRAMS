@@ -16,7 +16,7 @@ std_fileno->take_back = take_back;
 Chip8 *chip = malloc(sizeof(Chip8));
    ///making_sprites();  //CREA EL ARCHIVO DE LOS BYTES DE PIXELES
      init_chip(chip);   //INICIA UN PUNTERO DE CHIP CONFIGURANDO EL PUNTERO DE CHIP PC HACIA LA DIRECCION DE 0X200
-     init_load_rom(chip,"IBM Logo.ch8"); //CARGA LA ROM DENTRO DE EL BUFFER DE CHIP ES DECIR chip->rom
+     init_load_rom(chip,"BRIX.ch8"); //CARGA LA ROM DENTRO DE EL BUFFER DE CHIP ES DECIR chip->rom
 //=================================================================================================================
 
 

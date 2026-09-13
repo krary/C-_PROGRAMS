@@ -66,6 +66,7 @@ void take_back(struct termios *);
 void writing_keypad(Chip8 *);
 bool get_fd_set_config();
 int getting_char(char);
+int map_sdl_key_to_chip8(SDL_Keycode key);
 
 
 #endif
