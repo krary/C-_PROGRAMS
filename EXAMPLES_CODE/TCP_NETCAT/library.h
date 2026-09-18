@@ -6,7 +6,7 @@
 #include<arpa/inet.h>
 #include<netdb.h>
 #ifndef LIBRARY_H
-#define LIBRARY_H
+#define LIBRARY_H 
 
 
 #define PORT 80

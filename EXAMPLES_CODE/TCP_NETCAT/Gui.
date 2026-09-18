@@ -1,0 +1,35 @@
+Los 4 pilares en C para dominar el sistema
+Redes a bajo nivel (Sockets puros y Raw Sockets):
+
+Pasar de sockets TCP estándar (SOCK_STREAM) a Sockets Crudos (SOCK_RAW).
+************************************************************************
+En lugar de dejar que el sistema operativo construya las cabeceras IP y TCP por ti, las construyes manualmente byte a byte definiendo las estructuras struct iphdr y struct tcphdr. Esto te permite entender cómo se forjan paquetes a medida, cómo funcionan los escáneres de puertos (SYN Scan) y la manipulación de tráfico.
+
+Criptografía e inspección de TLS (OpenSSL en C):
+************************************************
+Manejar manualmente la capa de cifrado mediante la librería libssl.
+
+Comprender el flujo exacto de un Handshake TLS:
+***********************************************
+desde la negociación de algoritmos de cifrado (Cipher Suites) hasta la validación de certificados y la inspección del tráfico descifrado en memoria.
+
+
+Arquitectura y uso de memoria:
+*****************************
+Entender cómo se organizan la memoria Stack (pila) y el Heap (montículo) en ejecución.
+Analizar cómo un desbordamiento de búfer (Buffer Overflow) permite reescribir el puntero de instrucción (EIP/RIP) para redirigir el flujo de ejecución del programa hacia código arbitrario (shellcode).
+Llamadas al sistema (Syscalls) e interacción con el Kernel:
+Entender cómo el código en User Space interactúa con el Kernel Space de Linux mediante llamadas como sys_socket, sys_connect, sys_execve o ptrace (utilizada para inspección y depuración de procesos).
+
+La ruta práctica: Tu primer proyecto en C
+Si quieres empezar hoy mismo a construir las bases sin usar herramientas de terceros, el orden natural de desarrollo en C es:
+
+Un cliente/servidor HTTP en C sobre TCP: Manejando sockets nativos (socket, bind, listen, accept, connect, send, recv).
+
+Capa HTTPS: Integrar OpenSSL para realizar el cifrado y descifrado explícito sobre la conexión socket.
+
+Un Proxy HTTP Interceptador en C: Crear un programa que escuche localmente, reciba una petición, permita inspeccionar o alterar la cadena en el búfer de memoria (char buffer[]) y la reenvíe al servidor de destino.
+
+Un módulo de Fuzzing en C: Programar bucles concurrentes (usando pthread o multiplexación con select/epoll) para automatizar el envío masivo de payloads y analizar las respuestas del servidor directamente en memoria.
+
+Escribiendo cada línea de estos componentes es como se adquiere la comprensión profunda del comportamiento del software, la memoria y la red.
