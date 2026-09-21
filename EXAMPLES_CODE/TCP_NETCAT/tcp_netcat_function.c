@@ -42,5 +42,21 @@ void init_tcp(struct tcphdr *t){
     t->ack_seq = 0;   
     }
 
+uint16_t checksum(uint16_t *ptr,int nbyte){
+	uint32_t sum = 0;
+	uint16_t answer = 0;
+	while(nbyte > 1){
+		sum += *(ptr++);
+		nbyte-= 2;}
+	if(nbyte == 1){
 
+		*(uint8_t *)&answer = *(uint8_t *)ptr;
+		sum+=answer; 
+	}
+	while(sum >> 16){
+		sum = (sum & 0xffff) + (sum >> 16);}
+	answer = ~sum;
+	return answer;
+	
+}
     
