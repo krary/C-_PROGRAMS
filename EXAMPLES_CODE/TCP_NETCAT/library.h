@@ -12,13 +12,15 @@
 
 #define PORT 80
 #define DATAGRAM_LEN 4096
+typedef struct{
+    struct iphdr *ip_hdr;
+   	struct tcphdr *tcp_hdr;
+   	char datagram[DATAGRAM_LEN];
+   		
+}Netcat;
+void init_ip(Netcat*);
+void init_tcp(Netcat*);
 
-extern struct iphdr ip_header;
-extern struct tcphdr tcp_header;
-extern char datagram[DATAGRAM_LEN];
-void init_ip(struct iphdr *);
-void init_tcp(struct tcphdr *);
-void init_datagram_ip_tcp(char*);
 
 
 

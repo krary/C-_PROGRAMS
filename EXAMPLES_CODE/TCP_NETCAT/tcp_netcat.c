@@ -3,14 +3,8 @@
 
 int main(){
 
-
-   struct iphdr *ip_hdr;
-   struct tcphdr *tcp_hdr;
-
-   init_ip(ip_hdr);
-   init_tcp(tcp_hdr);
-
-
+   Netcat *netcat = calloc(1,sizeof(Netcat));
+   if(netcat == NULL)return 1;
 
 	return 0;
 }
