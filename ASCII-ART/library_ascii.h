@@ -8,6 +8,7 @@
 #define LIBRARY_ASCII_H
 
 
+void tam_file(char*);
 
 
 #endif
