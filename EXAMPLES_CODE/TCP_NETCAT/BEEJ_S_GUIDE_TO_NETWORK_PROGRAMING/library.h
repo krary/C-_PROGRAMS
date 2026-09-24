@@ -12,7 +12,7 @@ typedef struct{
 		int status;
 		struct addrinfo hints;   //OUR STRUCT WITH THE DATA THE CONNECTION THAT WE WANT TO MAKE
 		struct addrinfo  *servinfo;  //WILL POINT TO THE RESULTS
-		
+		char info_show[INET6_ADDRSTRLEN];
 	
 }Host;
 
