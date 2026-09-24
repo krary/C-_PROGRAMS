@@ -14,15 +14,15 @@ void init_data(Host *h){
 
 void show_data(Host *h){
 	struct addrinfo *p;
-	for(p = h->servinfo;p != NULL; p->ai_next){
+	for(p = h->servinfo;p != NULL;p= p->ai_next){
 		void *addr_ptr;
 		char *ipver;
 		if(p->ai_family == AF_INET){
 			struct sockaddr_in *addr_in = (struct sockaddr_in*)p->ai_addr;
 			addr_ptr = &(addr_in->sin_addr);
 			ipver = "IPV4";}
-		inet_ntop(p->ai_family,addr_ptr,ipver,h->info_show,sizeof(h->info_show));
+		inet_ntop(p->ai_family,addr_ptr,h->info_show,sizeof(h->info_show));
          
-		
+		printf("%s %s \n",ipver,h->info_show);
 	}
 }
