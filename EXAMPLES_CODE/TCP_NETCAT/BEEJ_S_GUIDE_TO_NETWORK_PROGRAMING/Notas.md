@@ -74,7 +74,7 @@ struct in_addr {
 ********************************************************************************************
 
 
-intet_pton()
+inet_pton()
 ***********
 THIS FUNCTION CALLED : PRESENTATION TO NETOWRK IS FUNCTION ITS CONVERT A FORMAT STRING NUMBER THAT 
 WE NEED TO CONVERT INTO THE FORMAT IP ADDRESS AND THE PASS THE ARGUMENTES INTO THE STRUCT add_in SO
