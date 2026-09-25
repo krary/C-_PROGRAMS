@@ -18,5 +18,6 @@ typedef struct{
 
 
 void init_data(Host*);
+void show_data(Host*);
 
 #endif

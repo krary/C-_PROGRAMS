@@ -21,6 +21,11 @@ void show_data(Host *h){
 			struct sockaddr_in *addr_in = (struct sockaddr_in*)p->ai_addr;
 			addr_ptr = &(addr_in->sin_addr);
 			ipver = "IPV4";}
+	else{
+struct sockaddr_in6 *addr_in = (struct sockaddr_in6*)p->ai_addr;
+addr_ptr = &(addr_in->sin6_addr);
+			ipver = "IPV6";        
+		}
 		inet_ntop(p->ai_family,addr_ptr,h->info_show,sizeof(h->info_show));
          
 		printf("%s %s \n",ipver,h->info_show);

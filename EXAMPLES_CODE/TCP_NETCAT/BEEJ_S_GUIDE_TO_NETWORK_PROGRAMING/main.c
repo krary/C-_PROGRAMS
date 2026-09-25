@@ -10,6 +10,10 @@ init_data(host_);
 
 
 
+    
+    
+    show_data(host_);
+
     if(host_->servinfo != NULL) freeaddrinfo(host_->servinfo);
     free(host_);
 	return 0;
