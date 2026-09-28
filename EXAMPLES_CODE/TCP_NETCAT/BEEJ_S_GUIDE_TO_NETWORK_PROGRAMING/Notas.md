@@ -131,6 +131,17 @@ int getaddrinfo(
 ********************************************************************************************
 
 
+
+int socket
+***********
+socket(ai_family, ai_socktype,ai_protocol);
+**************************************************************
+
+
+
+
+
+
 TENGO QUE PENSAR COMO EN PIEZAS DE PUZZLES PERO MAS SIMETRICOS ES DECIR 
 
 QUIERO A SER UN SERVIDOR 

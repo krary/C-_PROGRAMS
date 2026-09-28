@@ -28,6 +28,13 @@ addr_ptr = &(addr_in->sin6_addr);
 		}
 		inet_ntop(p->ai_family,addr_ptr,h->info_show,sizeof(h->info_show));
          
-		printf("%s %s \n",ipver,h->info_show);
-	}
+		printf("%s %s \n",ipver,h->info_show);}}
+
+
+void init_socket(Host *h){
+	if((h->file_descriptor_socket = socket(
+		h->servinfo->ai_family,
+		h->servinfo->ai_socktype,
+		h->servinfo->ai_protocol))){
+		printf("SOCKET INIT CORRETC\n");}
 }

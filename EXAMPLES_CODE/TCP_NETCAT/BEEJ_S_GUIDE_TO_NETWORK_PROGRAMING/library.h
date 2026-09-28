@@ -10,6 +10,7 @@
 
 typedef struct{
 		int status;
+		int file_descriptor_socket;
 		struct addrinfo hints;   //OUR STRUCT WITH THE DATA THE CONNECTION THAT WE WANT TO MAKE
 		struct addrinfo  *servinfo;  //WILL POINT TO THE RESULTS
 		char info_show[INET6_ADDRSTRLEN];
@@ -19,5 +20,6 @@ typedef struct{
 
 void init_data(Host*);
 void show_data(Host*);
+void init_socket(Host*);
 
 #endif
