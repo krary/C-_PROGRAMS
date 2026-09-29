@@ -20,3 +20,69 @@ C. Fuzzing y búsqueda de vulnerabilidades
 Muchos investigadores de seguridad independientes (bug hunters) trabajan completamente solos. Utilizan herramientas de fuzzing (como AFL++ o libFuzzer) 
 para inyectar millones de paquetes malformados creados por sus propios scripts en C contra software existente,
  encontrando fallos de memoria (buffer overflows, out-of-bounds read) en parsers o bibliotecas de red comerciales u open source.
+
+
+
+pcap_live
+**********
+Funcion con la cual inicializamos nuestro canal es decir la configuracion necesario para la captura de datos
+
+->handle = pcap_open_live("any",BUFSIZ,1,1000,p->error_buffer);
+*****************************************************************************************************************
+
+
+
+
+pcap_next()
+***********
+
+pcap_next ES UNA FUNCION INICIALIZADORA DE DATOS ALGO ASI COMO la funcion  infoaddr() es decir entregamos datos y nos devuelven structuras con datos
+
+u_char* = pcap_next(struct pcap_t*,struct pcap_pkthdr*);
+****************************************************************************************************************************************************
+
+
+
+ //////////////////////////////////////////////////////INTERPRETACION DE PAQUETES EN CRUDOS///////////////////////////////////////////////////////
+
+[PRIMER CAPA DE DATOS DE EL PAQUETE EN CRUDO]: LA CABEZERA DE ETHERNET
+
+ EN REDES LOS PRIMEROS 14 BYTES DE EL PAQUETE SIEMPRE TIENE UNA STRUCTURA FIJA DE TRES CAMPOS:
+
+
+
+										1[+]MAC Destino
+										2[+]MAC ORIGEN
+										3[+]EtherType (Tipo de protocolo)
+
+
+UN PUNTO ESENCIAL AQUI ES QUE SI YA TENEMOS UN PUNTERO  DE DATOS DE TIPO U_CHAR A LOS BYTES CRUDOS NECESITAMOS CASTERAR ESOS DATOS A UN STRUCT YA PREPARADO
+PARA INTERPRETAR ESOS DATOS Y ESE STRUCT ES [ether_header] DE LA LIBRERIA : netinet/if_ether.h QUE NOS PERMITE CAPTURAR LO ANTES EXPUESTO ES DECIR MAC DESTINO MAC ORIGNE ETHERTYPE
+                                            *************
+
+LO QUE SIGUE DESPUES DE LA LECTURA CORRECTA DE LOS CAMPOS MAC ORIGEN MAC DESTINO Y PROTOCOLO SIGUE LOS BYTES CRUDOS CORRESPONDIENTES A LOS IP DE LAS MAQUINAS
+PARA ELLO ES DECIR PARA INTERPETAR LOS DATOS TENEMOS EL STRUCT [iphdr] DE LA LIBRERIA : netinet/ip.h>
+															   *******
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                               
