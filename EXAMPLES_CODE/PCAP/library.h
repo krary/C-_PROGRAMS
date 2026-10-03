@@ -4,10 +4,14 @@
 #include<unistd.h>
 #include<pcap.h>
 #include<string.h>
+
 #include<netinet/if_ether.h>
 #include<netinet/ip.h>
+#include<netinet/tcp.h>
+#include<netinet/udp.h>
+
+
 #include<arpa/inet.h>
-#include<netinet/ip.h>
 #include<pcap.h>
 #include<ctype.h>
 #ifndef LIBRARY_H
@@ -25,11 +29,24 @@ typedef struct{
 	struct pcap_pkthdr header;
 	struct ether_header *ether;
     struct iphdr *ip_hdr;
+    struct udphdr *udp_hdr;
+    struct tcphdr *tcp_hdr;
+    struct icmphdr *icmp_hdr;
 	char error_buffer[PCAP_ERRBUF_SIZE];
+	char src_IP[INET_ADDRSTRLEN];
+	char dst_IP[INET_ADDRSTRLEN];
     const u_char *packet;
 	
 
 }PCap_info;
+
+
+typedef struct{
+	void (*init_struct_tcphdr)(PCap_info*);
+	void (*init_struct_udphdr)(PCap_info*);
+	void (*init_struct_icmphdr)(PCap_info*);
+	uint8_t protocol;
+}Protocols;
 
 void open_interface(PCap_info*);
 void capture_packet(PCap_info*);
@@ -37,8 +54,11 @@ void reading_packet_ascii(PCap_info*);
 void init_struct_ethernet(PCap_info*);
 void reading_packet_ethernet_MAC(PCap_info*);
 void reading_packet_ethernet_type(PCap_info*);
+void reading_packet_iphdr(PCap_info *p);
 void init_struct_iphdr(PCap_info *);
-
-
+void init_struct_tcpphdr(PCap_info *);
+void init_struct_udphdr(PCap_info *);
+void init_struct_icmphdr(PCap_info *);
+void init_struct_Protocols(Protocols*,PCap_info*);
 
 #endif

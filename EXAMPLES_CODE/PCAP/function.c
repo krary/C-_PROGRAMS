@@ -112,3 +112,40 @@ void init_struct_iphdr(PCap_info *p){
     	
 	}
 }
+
+
+void reading_packet_iphdr(PCap_info *p){
+	if((ntohs(p->ether->ether_type)) == ETHERTYPE_IP){
+		inet_ntop(AF_INET,&(p->ip_hdr->saddr),p->src_IP,INET_ADDRSTRLEN);
+		inet_ntop(AF_INET,&(p->ip_hdr->daddr),p->dst_IP,INET_ADDRSTRLEN);
+		printf("IP FUENTE: %s\n",p->src_IP);
+		printf("IP DESTINO: %s\n",p->dst_IP);
+
+		if(p->ip_hdr->protocol == IPPROTO_TCP){printf("PROTOCOLO : TCP\n");}
+		if(p->ip_hdr->protocol == IPPROTO_UDP){printf("PROTOCOLO : UDP\n");}
+		if(p->ip_hdr->protocol == IPPROTO_ICMP){printf("PROTOCOLO : ICMP\n");}
+	}
+}
+
+
+void init_struct_tcphdr(PCap_info *p){
+	p->tcp_hdr = (struct tcphdr*)(p->packet + (sizeof(struct ether_header) + p->ip_hdr->ihl*4));}
+
+void init_struct_udphdr(PCap_info *p){
+	p->udp_hdr = (struct udphdr*)(p->packet + (sizeof(struct ether_header) + p->ip_hdr->ihl*4));}
+
+void init_struct_icmphdr(PCap_info *p){
+	p->icmp_hdr = (struct icmphdr*)(p->packet + (sizeof(struct ether_header) + p->ip_hdr->ihl*4));}
+
+void init_struct_Protocols(Protocols *p,PCap_info *pc){
+    
+	if(pc->ip_hdr->protocol == IPPROTO_TCP){p->init_struct_tcphdr = init_struct_tcphdr; p->protocol = IPPROTO_TCP;}
+	if(pc->ip_hdr->protocol == IPPROTO_UDP){p->init_struct_tcphdr = init_struct_udphdr; p->protocol = IPPROTO_UDP;}
+	if(pc->ip_hdr->protocol == IPPROTO_ICMP){p->init_struct_icmphdr = init_struct_icmphdr; p->protocol = IPPROTO_ICMP;}
+
+	if(p->protocol != 0){
+		switch(p->protocol){
+			case IPPROTO_TCP: init_struct_tcphdr(pc);
+			case IPPROTO_UDP: init_struct_udphdr(pc);
+			case IPPROTO_ICMP: init_struct_icmphdr(pc);}}
+			}

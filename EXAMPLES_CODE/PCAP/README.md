@@ -56,7 +56,7 @@ u_char* = pcap_next(struct pcap_t*,struct pcap_pkthdr*);
 										3[+]EtherType (Tipo de protocolo)
 
 
-UN PUNTO ESENCIAL AQUI ES QUE SI YA TENEMOS UN PUNTERO  DE DATOS DE TIPO U_CHAR A LOS BYTES CRUDOS NECESITAMOS CASTERAR ESOS DATOS A UN STRUCT YA PREPARADO
+UN PUNTO ESENCIAL AQUI ES QUE SI YA TENEMOS UN PUNTERO  DE DATOS DE TIPO U_CHAR A LOS BYTES CRUDOS NECESITAMOS CASTEAR ESOS DATOS A UN STRUCT YA PREPARADO
 PARA INTERPRETAR ESOS DATOS Y ESE STRUCT ES [ether_header] DE LA LIBRERIA : netinet/if_ether.h QUE NOS PERMITE CAPTURAR LO ANTES EXPUESTO ES DECIR MAC DESTINO MAC ORIGNE ETHERTYPE
                                             *************
 
@@ -65,7 +65,36 @@ PARA ELLO ES DECIR PARA INTERPETAR LOS DATOS TENEMOS EL STRUCT [iphdr] DE LA LIB
 															   *******
 
 
+CON LOS CAMPOS EXPUESTOS DE iphdr PODEMOS SABER O CONOCER LA ETIQUETA DE EL PROTOCOLO DE EL PAQUETE CAPTURADO EJEM:
 
+1  TIENE EL VALOR DE IPROTO_ICMP
+6  TIENE EL VALOR DE TCP
+17 TIENE EL VALOR DE UDP
+          NOTA: LOS VALORES ANTES EXPUESTOS EN EL CAMPO DE EL STRUCT iphdr->protocol NO NECESITAN NINGUN CASTING
+          O FUNCION AUXILIAR YA QUE ESO VALORES TIENE EL VALOR DE UN BYTE ES DECIR uint8_t ......
+          
+RESUMEN:
+
+/*u_char *paquete_capturado*/
+-----------------------------------------------------------------------------
+pcap_pkthdr -> caplen   byte capturados                                     -
+pcap_pkthdr -> len      numeros de bytes que realmente habian en la red     -
+u_char *                puntero a memoria con los datos capturados          -
+-----------------------------------------------------------------------------
+
+/*struct ether_header*/
+-----------------------------------------------------------------------------
+struct ether_header * -> dhost   [index] MAC de destino                     -  
+struct ether_header * -> shost   [index] MAC de origen                      -  
+struct ether_header * -> type    que tipo de cabezera viene a continuacion  -  
+-----------------------------------------------------------------------------
+
+/*struct iphdr*/
+-----------------------------------------------------------------------------
+struct ipheader * -> daddr   IP de destino                                  -  
+struct ipheader * -> saddr   IP de origen                                   -  
+struct ipheader * -> protocol    que tipo de cabezera viene a continuacion  -  
+-----------------------------------------------------------------------------
 
 
 
