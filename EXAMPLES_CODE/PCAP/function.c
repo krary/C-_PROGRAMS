@@ -126,6 +126,31 @@ void reading_packet_iphdr(PCap_info *p){
 		if(p->ip_hdr->protocol == IPPROTO_ICMP){printf("PROTOCOLO : ICMP\n");}
 	}
 }
+void reading_packet_tcphdr(PCap_info*p){
+	if(p->tcp_hdr !=NULL){
+		uint16_t src_port = ntohs(p->tcp_hdr->th_sport);
+		uint16_t drc_port = ntohs(p->tcp_hdr->th_dport);
+		printf("[TCP]PUERTO DE ORIGEN : %u\n",src_port);
+		printf("[TCP]PUERTO DE ORIGEN : %u\n",drc_port);
+		printf("[FLAGS ] ACK: %u SYN: %u FIN: %u RST: %u\n",p->tcp_hdr->ack,p->tcp_hdr->syn,p->tcp_hdr->fin,p->tcp_hdr->rst);
+		
+	}
+}
+void reading_packet_udphdr(PCap_info*p){
+	if(p->udp_hdr !=NULL){
+		uint16_t src_port = ntohs(p->udp_hdr->uh_sport);
+		uint16_t drc_port = ntohs(p->udp_hdr->uh_dport);
+		printf("[UDP ]PUERTO DE ORIGEN : %u\n",src_port);
+		printf("[UDP ]PUERTO DE DESTINO : %u\n",drc_port);
+		}
+}
+void reading_packet_icmphdr(PCap_info *p){
+	if (p->icmp_hdr != NULL) {
+	        printf("[ICMP] TIPO: %u | CODIGO: %u\n", p->icmp_hdr->type, p->icmp_hdr->code);
+	        if (p->icmp_hdr->type == ICMP_ECHOREPLY) printf("       -> Echo Reply (Ping Response)\n");
+	        else if (p->icmp_hdr->type == ICMP_ECHO) printf("       -> Echo Request (Ping Request)\n");
+	    }
+}
 
 
 void init_struct_tcphdr(PCap_info *p){
@@ -139,13 +164,22 @@ void init_struct_icmphdr(PCap_info *p){
 
 void init_struct_Protocols(Protocols *p,PCap_info *pc){
     
-	if(pc->ip_hdr->protocol == IPPROTO_TCP){p->init_struct_tcphdr = init_struct_tcphdr; p->protocol = IPPROTO_TCP;}
-	if(pc->ip_hdr->protocol == IPPROTO_UDP){p->init_struct_tcphdr = init_struct_udphdr; p->protocol = IPPROTO_UDP;}
-	if(pc->ip_hdr->protocol == IPPROTO_ICMP){p->init_struct_icmphdr = init_struct_icmphdr; p->protocol = IPPROTO_ICMP;}
+	if(pc->ip_hdr->protocol == IPPROTO_TCP){p->init_struct_tcphdr = init_struct_tcphdr; p->protocol = IPPROTO_TCP;p->reading_info = reading_packet_tcphdr;}
+	if(pc->ip_hdr->protocol == IPPROTO_UDP){p->init_struct_udphdr = init_struct_udphdr; p->protocol = IPPROTO_UDP;p->reading_info = reading_packet_udphdr;}
+	if(pc->ip_hdr->protocol == IPPROTO_ICMP){p->init_struct_icmphdr = init_struct_icmphdr; p->protocol = IPPROTO_ICMP;p->reading_info= reading_packet_icmphdr;}
 
 	if(p->protocol != 0){
 		switch(p->protocol){
-			case IPPROTO_TCP: init_struct_tcphdr(pc);
-			case IPPROTO_UDP: init_struct_udphdr(pc);
-			case IPPROTO_ICMP: init_struct_icmphdr(pc);}}
+			case IPPROTO_TCP: init_struct_tcphdr(pc);reading_packet_tcphdr(pc);pc->l4_len = pc->tcp_hdr->th_off *4;break;
+			case IPPROTO_UDP: init_struct_udphdr(pc);reading_packet_udphdr(pc);pc->l4_len = sizeof(struct udphdr);break;
+			case IPPROTO_ICMP: init_struct_icmphdr(pc);reading_packet_udphdr(pc);pc->l4_len = sizeof(struct icmphdr);break;}}
 			}
+void reading_packet_payload(PCap_info *p){
+    if(p->ip_hdr == NULL)return;
+    size_t ip_len = p->ip_hdr->ihl *4;
+    size_t ether_len = sizeof(struct ether_header);
+    size_t total_len = ip_len + ether_len + p->l4_len;
+    printf("EL TOTAL DE BYTE DE CABEZERAS ES DE : %zu \n",total_len);
+    printf("Y EL TOTAL DE BYTE CAPTURADOS ES DE  : %u \n",p->header.caplen);
+    
+}

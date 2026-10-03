@@ -67,9 +67,9 @@ PARA ELLO ES DECIR PARA INTERPETAR LOS DATOS TENEMOS EL STRUCT [iphdr] DE LA LIB
 
 CON LOS CAMPOS EXPUESTOS DE iphdr PODEMOS SABER O CONOCER LA ETIQUETA DE EL PROTOCOLO DE EL PAQUETE CAPTURADO EJEM:
 
-1  TIENE EL VALOR DE IPROTO_ICMP
-6  TIENE EL VALOR DE TCP
-17 TIENE EL VALOR DE UDP
+1  TIENE EL VALOR DE IPPROTO_ICMP
+6  TIENE EL VALOR DE IPPROTO_TCP
+17 TIENE EL VALOR DE IPPROTO_UDP
           NOTA: LOS VALORES ANTES EXPUESTOS EN EL CAMPO DE EL STRUCT iphdr->protocol NO NECESITAN NINGUN CASTING
           O FUNCION AUXILIAR YA QUE ESO VALORES TIENE EL VALOR DE UN BYTE ES DECIR uint8_t ......
           
@@ -93,8 +93,21 @@ struct ether_header * -> type    que tipo de cabezera viene a continuacion  -
 -----------------------------------------------------------------------------
 struct ipheader * -> daddr   IP de destino                                  -  
 struct ipheader * -> saddr   IP de origen                                   -  
-struct ipheader * -> protocol    que tipo de cabezera viene a continuacion  -  
+struct ipheader * -> protocol    que tipo de cabezera viene a continuacion  -
+struct ipheader * -> ihl         palabras de 32 bits(cuanto mide el struct) -
 -----------------------------------------------------------------------------
+
+
+/*struct tcphdr*/
+-----------------------------------------------------------------------------------------
+struct tcphdr * -> th_sport   PUERTO de destino                                          -  
+struct tcphdr * -> th_dport   PUERTO de origen                                           -  
+struct tcphdr * -> ack        indica que ha recivido datos hasta cierto punto            -
+struct tcphdr * -> syn        iniciar una conexion tcp y syncronizar un num de secuencia -
+struct tcphdr * -> fin        indica que un extremo quiere termina su envio              -
+struct tcphdr * -> rst        aborta o rechaza una conexion inmediatamente               -
+------------------------------------------------------------------------------------------
+
 
 
 

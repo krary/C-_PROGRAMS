@@ -19,9 +19,10 @@ init_struct_iphdr(p_cap);
 reading_packet_iphdr(p_cap);
 
 init_struct_Protocols(protocols,p_cap);
-
+reading_packet_payload(p_cap);
 
 pcap_close(p_cap->handle);
 if(p_cap != NULL)free(p_cap);
+if(protocols != NULL)free(protocols);
 	return 0;
 }

@@ -7,6 +7,7 @@
 
 #include<netinet/if_ether.h>
 #include<netinet/ip.h>
+#include<netinet/ip_icmp.h>
 #include<netinet/tcp.h>
 #include<netinet/udp.h>
 
@@ -35,6 +36,7 @@ typedef struct{
 	char error_buffer[PCAP_ERRBUF_SIZE];
 	char src_IP[INET_ADDRSTRLEN];
 	char dst_IP[INET_ADDRSTRLEN];
+	size_t l4_len;
     const u_char *packet;
 	
 
@@ -45,6 +47,7 @@ typedef struct{
 	void (*init_struct_tcphdr)(PCap_info*);
 	void (*init_struct_udphdr)(PCap_info*);
 	void (*init_struct_icmphdr)(PCap_info*);
+	void (*reading_info)(PCap_info*);
 	uint8_t protocol;
 }Protocols;
 
@@ -55,10 +58,14 @@ void init_struct_ethernet(PCap_info*);
 void reading_packet_ethernet_MAC(PCap_info*);
 void reading_packet_ethernet_type(PCap_info*);
 void reading_packet_iphdr(PCap_info *p);
+void reading_packet_tcphdr(PCap_info *p);
+void reading_packet_udphdr(PCap_info *p);
+void reading_packet_icmphdr(PCap_info *p);
 void init_struct_iphdr(PCap_info *);
 void init_struct_tcpphdr(PCap_info *);
 void init_struct_udphdr(PCap_info *);
 void init_struct_icmphdr(PCap_info *);
 void init_struct_Protocols(Protocols*,PCap_info*);
+void reading_packet_payload(PCap_info *);
 
 #endif
