@@ -131,7 +131,7 @@ void reading_packet_tcphdr(PCap_info*p){
 		uint16_t src_port = ntohs(p->tcp_hdr->th_sport);
 		uint16_t drc_port = ntohs(p->tcp_hdr->th_dport);
 		printf("[TCP]PUERTO DE ORIGEN : %u\n",src_port);
-		printf("[TCP]PUERTO DE ORIGEN : %u\n",drc_port);
+		printf("[TCP]PUERTO DE DESTINO : %u\n",drc_port);
 		printf("[FLAGS ] ACK: %u SYN: %u FIN: %u RST: %u\n",p->tcp_hdr->ack,p->tcp_hdr->syn,p->tcp_hdr->fin,p->tcp_hdr->rst);
 		
 	}
@@ -179,7 +179,30 @@ void reading_packet_payload(PCap_info *p){
     size_t ip_len = p->ip_hdr->ihl *4;
     size_t ether_len = sizeof(struct ether_header);
     size_t total_len = ip_len + ether_len + p->l4_len;
+
     printf("EL TOTAL DE BYTE DE CABEZERAS ES DE : %zu \n",total_len);
     printf("Y EL TOTAL DE BYTE CAPTURADOS ES DE  : %u \n",p->header.caplen);
+    if(p->header.caplen > total_len){
+    	const u_char *ptr_payload = p->packet + total_len;
+    	size_t payload_len = p->header.caplen - total_len;
+    	printf("EL NUMERO DE BYTE DE LA CARGA O PAYLOAD ES DE %zu\n",payload_len);
+
+    	for(size_t i = 0; i < payload_len; i++) {
+    	            printf("%02X ", ptr_payload[i]);
+    	            if ((i + 1) % 16 == 0 || i == payload_len - 1) {
+    	                // Espaciado estético para alinear el texto ASCII
+    	                if (i == payload_len - 1 && (i + 1) % 16 != 0) {
+    	                    for (size_t pad = 0; pad < 16 - ((i + 1) % 16); pad++) printf("   ");
+    	                }
+    	                printf(" | ");
+    	                size_t start = i - (i % 16);
+    	                for (size_t j = start; j <= i; j++) {
+    	                    printf("%c", isprint(ptr_payload[j]) ? ptr_payload[j] : '.');
+    	                }
+    	                printf("\n");
+    	            }
+    	        }
+    	    
+    }
     
 }
