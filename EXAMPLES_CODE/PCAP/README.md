@@ -111,12 +111,43 @@ struct tcphdr * -> rst        aborta o rechaza una conexion inmediatamente      
 
 
 
+PCAP_LOOP VERSUS PCAP_NEXT
+**************************
+-------------------------------------------------------------------------------------------------------------------------
+pcap_next: ES UNA FUNCION SINCRONA CONGELANTE ES DECIR CONGELA EL PROGRAMA HASTA CAPTURAR UN PAQUETE SUS PARAMETROS SON:-
+  u_char *packete  = pcap_next( pcap_t   ,    &struct pcap_pkthdr )                                                     -
+  NOTA: packete ES EL PUNTERO A LOS BYTES DEL PAKETE CAPTURADO                                                          -
+  NOTA: EL PRIMER PARAMETRO DE pcap_next ES DE TIPO pcap_t PREVIAMENTE ES UN DESCRIPTOR QUE DEVULVE LA FUNCION          -
+  pcap_t p =  pcap_open_live("wlxd8448953edc3",BUFSIZ,1,1000,p->error_buffer);                                          -
+-------------------------------------------------------------------------------------------------------------------------
 
 
 
 
 
 
+
+-------------------------------------------------------------------------------------------------------------------------
+pcap_loop(struct pcap_t,int ,function_callback,const u_char *datos);                                               -
+NOTA: EL PRIMER PARAMETRO DE pcap_loop ES DE TIPO pcap_t PREVIAMENTE ES UN DESCRIPTOR QUE DEVULVE LA FUNCION            -
+  pcap_t p =  pcap_open_live("wlxd8448953edc3",BUFSIZ,1,1000,p->error_buffer);                                          -
+NOTA: EL SEGUNDO PARAMETRO ES UN ENTERO COMUNMENTE ES 0                                                                 -
+                                                                                                                        -
+                                                                                                                        -
+NOTA: EL TERCER PARAMETRO ES NUESTRO CALLBACK FUNCTION QUE SERÁ LLAMADA CADA VEZ QUE SE CAPTURE UN PAQUETE Y TIENE      -
+LA SIGUIENTE FIRMA:                                                                                                     -
+ =======================================================================================================================                                                                                                         
+    void my_callback(u_char *data,const struct pcap_pkthdr *handle ,const u_char *pakete_capturado);                    -
+NOTA : EL PRIMER PARAMETRO DE my_callback u_char ES EL PARAMETRO QUE PODEMOS CASTEAR PARA PODER TRANSMITIRLE LOS DATOS  -
+NOTA: EL  SEGUNDO PARAMETRO  DE EL CALL BACK ES DE TIPO pcap_pkthdr * handle Y ES EL QUE NOS LLENA EL MISMO PCAP_LOOP   -       
+NOTA: EL TERCER PARAMETRO ES EL PAKETE DE BYTE QUE pcap_loop CAPTURA POR NOSOTROS EL CUAL PODEMOS GUARDAR EN EL DATO    -
+CASTEADO                                                                                                                -
+=========================================================================================================================                                                                                                             
+NOTA: EL TERCER PARAMETRO DE pcap_loop ES EL DATO QUE QUEREMO CASTEAR DENTRO DE NUESTRA FUNCION CALLBACK ES DECIR       -
+(u_char *)nuestro_struct                                                                                                - 
+-------------------------------------------------------------------------------------------------------------------------
+
+**************************************************************************************************************************
 
 
 

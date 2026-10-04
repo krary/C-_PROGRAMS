@@ -172,7 +172,7 @@ void init_struct_Protocols(Protocols *p,PCap_info *pc){
 		switch(p->protocol){
 			case IPPROTO_TCP: init_struct_tcphdr(pc);reading_packet_tcphdr(pc);pc->l4_len = pc->tcp_hdr->th_off *4;break;
 			case IPPROTO_UDP: init_struct_udphdr(pc);reading_packet_udphdr(pc);pc->l4_len = sizeof(struct udphdr);break;
-			case IPPROTO_ICMP: init_struct_icmphdr(pc);reading_packet_udphdr(pc);pc->l4_len = sizeof(struct icmphdr);break;}}
+			case IPPROTO_ICMP: init_struct_icmphdr(pc);reading_packet_icmphdr(pc);pc->l4_len = sizeof(struct icmphdr);break;}}
 			}
 void reading_packet_payload(PCap_info *p){
     if(p->ip_hdr == NULL)return;
@@ -199,10 +199,30 @@ void reading_packet_payload(PCap_info *p){
     	                for (size_t j = start; j <= i; j++) {
     	                    printf("%c", isprint(ptr_payload[j]) ? ptr_payload[j] : '.');
     	                }
-    	                printf("\n");
-    	            }
-    	        }
-    	    
-    }
-    
+    	                printf("\n");}}}}
+
+void init_packet_callback(u_char *data,const struct pcap_pkthdr *hdr , const u_char *bytes_crudos){
+	PCap_info *p = (PCap_info *)data;
+	p->header = *hdr;
+	p->packet = bytes_crudos;
+
+/*	p->ip_hdr = NULL;
+	p->tcp_hdr = NULL;
+	p->udp_hdr = NULL;
+	p->icmp_hdr = NULL;
+	//p->l4_len = 0;*/
+	reading_packet_ascii(p);
+	init_struct_ethernet(p);
+	reading_packet_ethernet_MAC(p);
+	reading_packet_ethernet_type(p);
+	init_struct_iphdr(p);
+	reading_packet_iphdr(p);
+	init_struct_Protocols(p->p,p);
+	reading_packet_payload(p);
+	
+}
+void start_capture_loop(PCap_info*p,int packet_count){
+	if(pcap_loop(p->handle,packet_count,init_packet_callback,(u_char*)p)< 0){
+		printf("[ERROR] durante la captura de el loop  \n");
+	}
 }
