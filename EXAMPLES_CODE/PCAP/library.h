@@ -36,6 +36,7 @@ typedef struct{
     struct tcphdr *tcp_hdr;
     struct icmphdr *icmp_hdr;
     struct protocols *p;
+    struct bpf_program bpf_p;
 	char error_buffer[PCAP_ERRBUF_SIZE];
 	char src_IP[INET_ADDRSTRLEN];
 	char dst_IP[INET_ADDRSTRLEN];
@@ -72,5 +73,5 @@ void init_struct_Protocols(Protocols*,PCap_info*);
 void init_packet_callback(u_char *,const struct pcap_pkthdr *, const u_char *);
 void start_capture_loop(PCap_info*,int);
 void reading_packet_payload(PCap_info *);
-
+int init_packet_bpf(PCap_info *,const char *);
 #endif

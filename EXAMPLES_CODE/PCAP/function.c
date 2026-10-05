@@ -226,3 +226,23 @@ void start_capture_loop(PCap_info*p,int packet_count){
 		printf("[ERROR] durante la captura de el loop  \n");
 	}
 }
+
+int init_packet_bpf(PCap_info *p,const char *filter){
+	
+	if((pcap_compile(p->handle,&p->bpf_p,filter,0,PCAP_NETMASK_UNKNOWN)) == -1){
+		printf("ERROR %s bpf_progam [campo: u_int bf_len campo: struct bpf_insn* bf_insns] EXPRESION: %s \n"
+		,pcap_geterr(p->handle),filter);return -1;}
+
+	//APLICANDO EL FILTRO...
+	if((pcap_setfilter(p->handle,&p->bpf_p)) == -1){
+		printf("ERROR EN APLICAR EL FILTRO %s \n"
+				,pcap_geterr(p->handle));
+				 pcap_freecode(&p->bpf_p);
+				 return -1;}
+	printf("EL FILTRO %s SE HA APLICADO CON EXITO \n",filter);
+	return 0;
+	
+     
+	
+	
+}
