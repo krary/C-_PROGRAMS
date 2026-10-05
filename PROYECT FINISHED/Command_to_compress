@@ -1,0 +1,4 @@
+#tar -czvf name.tar.gz name_of_file_to_compress
+
+TO DESCOMPRESS
+#tar -xzvf namt.tar.gz
