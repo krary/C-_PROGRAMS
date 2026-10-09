@@ -226,7 +226,7 @@ void start_capture_loop(PCap_info*p,int packet_count){
 		printf("[ERROR] durante la captura de el loop  \n");
 	}
 }
-
+//struct bpf_program......PROTOCOLO BERKELY PRTOCOL FILTER
 int init_packet_bpf(PCap_info *p,const char *filter){
 	
 	if((pcap_compile(p->handle,&p->bpf_p,filter,0,PCAP_NETMASK_UNKNOWN)) == -1){
@@ -240,9 +240,7 @@ int init_packet_bpf(PCap_info *p,const char *filter){
 				 pcap_freecode(&p->bpf_p);
 				 return -1;}
 	printf("EL FILTRO %s SE HA APLICADO CON EXITO \n",filter);
-	return 0;
+	return 0;}
+
+
 	
-     
-	
-	
-}
