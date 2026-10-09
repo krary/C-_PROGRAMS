@@ -27,7 +27,8 @@ extern void protocols;
 
 
 typedef struct{
-
+    uint8_t option;
+    pcap_if_t *alldevs;
 	pcap_t *handle;
 	struct pcap_pkthdr header;
 	struct ether_header *ether;
@@ -71,6 +72,7 @@ void init_struct_udphdr(PCap_info *);
 void init_struct_icmphdr(PCap_info *);
 void init_struct_Protocols(Protocols*,PCap_info*);
 void init_packet_callback(u_char *,const struct pcap_pkthdr *, const u_char *);
+void init_packet_pcapift(PCap_info*);
 void start_capture_loop(PCap_info*,int);
 void reading_packet_payload(PCap_info *);
 int init_packet_bpf(PCap_info *,const char *);

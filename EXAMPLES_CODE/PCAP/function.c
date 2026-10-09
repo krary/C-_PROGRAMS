@@ -242,5 +242,31 @@ int init_packet_bpf(PCap_info *p,const char *filter){
 	printf("EL FILTRO %s SE HA APLICADO CON EXITO \n",filter);
 	return 0;}
 
+void init_packet_pcapift(PCap_info *p){
+	if(pcap_findalldevs(&p->alldevs,p->error_buffer) == -1){
+	    printf("ERROR EN LA LECTURA DE LA TARJETA DE RED..%s\n",p->error_buffer);
+	    return;}
+	pcap_if_t *r;
+	int index = 0;
+	for(r=p->alldevs;r->next != NULL;r = r->next){
+	    printf("==============================================\n");
+		printf("Nombre de la interfaz: [%d]%s\n",index++,r->name);
+        if(r->description){
+        printf("------------------------------------------------\n");
+		printf("Descripcion:%s\n",r->description);
+		printf("-------------------------------------------------\n");}
+        printf("==============================================\n");
+	}
+	
+	pcap_freealldevs(p->alldevs);
+}
+
+void selection(PCap_info *p){
+	while(1){
+		
+	}
+}
+
+
 
 	

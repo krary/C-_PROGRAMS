@@ -10,27 +10,32 @@ void my_callback_mutation(int signum){
 int main(int argc, char* argv[] ){
 
 printf("VALUE OF INET_ADDRSTRLEN : %d\n",INET_ADDRSTRLEN);
-const char *argument = (argc > 1)?argv[1]:"icmp";
+//const char *argument = (argc > 1)?argv[1]:"icmp";
 
 PCap_info *p_cap = calloc(1,sizeof(PCap_info));
-Protocols *protocols = calloc(1,sizeof(Protocols));
-p_cap->p = protocols;
 
-signal(SIGINT,my_callback_mutation);
+//Protocols *protocols = calloc(1,sizeof(Protocols));
+//p_cap->p = protocols;
 
-open_interface(p_cap);
-if(p_cap->handle != NULL)global_handler_state = p_cap->handle;
+//signal(SIGINT,my_callback_mutation);
+
+//open_interface(p_cap);
+//if(p_cap->handle != NULL)global_handler_state = p_cap->handle;
 
 
-if((init_packet_bpf(p_cap,argument)) != 0){
-	pcap_close(p_cap->handle);
-	return EXIT_FAILURE;
-}
+//if((init_packet_bpf(p_cap,argument)) != 0){
+//	pcap_close(p_cap->handle);
+//	return EXIT_FAILURE;}
 
+init_packet_pcapift(p_cap);
+
+
+/*
 start_capture_loop(p_cap,0);
 
 pcap_close(p_cap->handle); //CERRANDO EL DESCRIPTOR DE ARCHIVOS..
 if(p_cap != NULL)free(p_cap);
 if(protocols != NULL)free(protocols);
+*/
 	return 0;
 }
