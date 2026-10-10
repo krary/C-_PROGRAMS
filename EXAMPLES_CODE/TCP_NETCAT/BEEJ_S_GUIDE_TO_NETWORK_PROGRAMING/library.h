@@ -21,5 +21,6 @@ typedef struct{
 void init_data(Host*);
 void show_data(Host*);
 void init_socket(Host*);
+void init_bind(Host*);
 
 #endif

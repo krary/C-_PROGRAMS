@@ -8,7 +8,7 @@ Host *host_ = calloc(1,sizeof (Host));
 init_data(host_);
 show_data(host_);
 init_socket(host_);
-
+init_bind(host_);
 
     if(host_->servinfo != NULL) freeaddrinfo(host_->servinfo);
     free(host_);

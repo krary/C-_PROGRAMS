@@ -38,3 +38,11 @@ void init_socket(Host *h){
 		h->servinfo->ai_protocol))){
 		printf("SOCKET INIT CORRETC\n");}
 }
+
+
+void init_bind(Host *h){
+	bind(h->file_descriptor_socket,
+	h->servinfo->ai_addr,
+	h->servinfo->ai_addrlen);
+	printf("BIND INIT CORRETC\n");
+}

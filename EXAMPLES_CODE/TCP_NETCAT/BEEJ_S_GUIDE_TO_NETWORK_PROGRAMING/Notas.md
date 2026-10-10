@@ -191,3 +191,12 @@ in_addr
 
 NECESISTO DEFINIR ADDRINFO
  
+
+
+bind
+****
+LA FUMCION BIND SU PRINCIPAL FUNCION ES ASOCIAR NUESTRO SOCKETS
+A LA MISMA FUNCION BIND
+
+bind(socket,struct struct sockaddr,sizeof(struct sockaddr));
+*************************************************************
