@@ -200,3 +200,44 @@ A LA MISMA FUNCION BIND
 
 bind(socket,struct struct sockaddr,sizeof(struct sockaddr));
 *************************************************************
+
+
+listen
+*****
+LA FUNCION DE LISTEN ES ESCUCHAR UNA COLA DE CONEXIONES ENTRANTES Y TIENE DOS ARGUMENTOS 1 NUESTRO SOCKET 2 NUM DE CONEXIONES
+QUE PODEMOS PERMITIR O ESCUCHAR E.J
+
+#define NUM_CONNECTION 5;
+int fd_socket = socket(ai_family,ai_socktype,ai_protocol);
+listen(fd_socket,NUM_CONNECTION);
+***************************************************************************************************************************
+
+
+accept
+*****
+LA FUNCION ACCEPT ES LA QUE NOS PERMITE MANEJA CUALQUIERA DE LAS CONEXIONES ENTRANTES PARA ELLO NECESITAMOS 
+1[+] UN SOCKET QUE SERÁ ASOCIADO A ESA CONEXION DICHO SOCKET ES DIFERENTE AL SOCKET ORIGINAL DE NUESTRO SERVIDOR QUE 
+DEVUELVE LA FUNCION SOCKET
+
+2[+]UN STRUCT DE TIPO SOCKADDR_STORAGE ESTE STRUCT TIENE TODA LA INFORMACION DE EL EQUIPO O LA  MAQUINA QUE ESTA 
+CONECTADO A NUESTRA MAQUINA ES DE LA FAMILIA DE EL STRUCT SOCKADDR Y POR TANTO ME IMAGINI QUE DE EL SOCKADDR_IN
+
+3[+]EL TAMAÑO DE NUESTRO STRUCT SOCKADDR_STORAGE QUE ESTA DADO POR UN TYPE socklen_t
+
+E.J
+------------------------------------------------------------------------------------
+int fd_socket_connect;                                                             -
+struct sockaddr_storage there_struct;                                              -
+socklen_t size;                                                                    -
+                                                                                   -
+size = sizeof(there_struct);                                                       -
+                                                                                   -
+fd_socket_connect = accept(nuestro_fd_socket,(struct sockaddr*)&there_struct,&size)-
+------------------------------------------------------------------------------------
+***************************************************************************************************************************
+
+
+
+
+
+

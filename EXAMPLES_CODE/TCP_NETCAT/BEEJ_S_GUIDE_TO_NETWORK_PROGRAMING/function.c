@@ -32,17 +32,44 @@ addr_ptr = &(addr_in->sin6_addr);
 
 
 void init_socket(Host *h){
-	if((h->file_descriptor_socket = socket(
+	h->file_descriptor_socket = socket(
 		h->servinfo->ai_family,
 		h->servinfo->ai_socktype,
-		h->servinfo->ai_protocol))){
-		printf("SOCKET INIT CORRETC\n");}
+		h->servinfo->ai_protocol);
+	if(h->file_descriptor_socket == -1){
+		perror("socket");
+		return;}
 }
 
 
 void init_bind(Host *h){
-	bind(h->file_descriptor_socket,
+	if(bind(h->file_descriptor_socket,
 	h->servinfo->ai_addr,
-	h->servinfo->ai_addrlen);
-	printf("BIND INIT CORRETC\n");
+	h->servinfo->ai_addrlen) == -1){
+		perror("bind");
+		return;} 
+	
+}
+
+
+void init_listen(Host *h){
+	listen(h->file_descriptor_socket,5);
+	printf("LISTEN INIT CORRECT\n");}
+
+
+void init_accept(Host *h) {
+    h->size_of_there_struct = sizeof(h->there_struct);
+	h->fd_socket_connection = accept(h->file_descriptor_socket,
+		(struct sockaddr*)&h->there_struct,
+		&h->size_of_there_struct);
+	
+}
+
+
+void init_send(Host *h){
+	char buffer[1024];
+	memset(buffer,0,sizeof(buffer));
+	strcpy(buffer,"Hi from here!!!");
+
+	int status_respond = send(h->fd_socket_connection,buffer,strlen(buffer),0);
 }

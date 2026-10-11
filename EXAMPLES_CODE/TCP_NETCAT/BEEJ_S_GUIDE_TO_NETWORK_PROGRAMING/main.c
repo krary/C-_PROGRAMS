@@ -9,6 +9,11 @@ init_data(host_);
 show_data(host_);
 init_socket(host_);
 init_bind(host_);
+init_listen(host_);
+init_accept(host_);
+init_send(host_);
+
+
 
     if(host_->servinfo != NULL) freeaddrinfo(host_->servinfo);
     free(host_);
