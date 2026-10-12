@@ -12,6 +12,7 @@ init_bind(host_);
 init_listen(host_);
 init_accept(host_);
 init_send(host_);
+init_recv(host_);
 
 
 

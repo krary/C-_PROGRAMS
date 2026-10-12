@@ -29,5 +29,5 @@ void init_bind(Host*);
 void init_listen(Host*);
 void init_accept(Host*);
 void init_send(Host*);
-
+void init_recv(Host*);
 #endif

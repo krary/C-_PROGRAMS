@@ -59,7 +59,8 @@ void init_listen(Host *h){
 
 void init_accept(Host *h) {
     h->size_of_there_struct = sizeof(h->there_struct);
-	h->fd_socket_connection = accept(h->file_descriptor_socket,
+	h->fd_socket_connection = accept(
+	    h->file_descriptor_socket,
 		(struct sockaddr*)&h->there_struct,
 		&h->size_of_there_struct);
 	
@@ -72,4 +73,14 @@ void init_send(Host *h){
 	strcpy(buffer,"Hi from here!!!");
 
 	int status_respond = send(h->fd_socket_connection,buffer,strlen(buffer),0);
+}
+void init_recv(Host *h){
+	char buffer[1024];
+	memset(buffer,0,sizeof(buffer));
+	int num_recbyte=recv(
+			h->file_descriptor_socket,
+			buffer,sizeof(buffer),
+			0);
+   if(num_recbyte > 0){
+	printf("[cliente] %s\n",buffer);}
 }
